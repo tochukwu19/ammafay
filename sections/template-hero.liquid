@@ -1,0 +1,185 @@
+<!-- Hero Section Schema -->
+{%- liquid
+  assign hero_image = section.settings.hero_image | default: 'Hero_image.jpg'
+  assign hero_title = section.settings.hero_title | default: 'Gentle Effective Natural Baby-Safe'
+  assign hero_subtitle = section.settings.hero_subtitle | default: 'Powered By Pure HOCl — Gentle, Effective, And Launching This November.'
+  assign cta_text = section.settings.cta_text | default: 'Pre-Order Now - Get 30% Off'
+  assign cta_url = section.settings.cta_url | default: routes.collections_url
+  assign launch_date = section.settings.launch_date | default: '2024-11-30T00:00:00'
+  assign show_countdown = section.settings.show_countdown | default: true
+-%}
+
+<style>
+  .hero-section {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), 
+                      url("{{ hero_image | file_img_url: 'master' }}");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+  }
+  
+  .countdown-timer {
+    font-family: 'Arial', monospace;
+    font-weight: 600;
+    letter-spacing: 2px;
+  }
+  
+  .countdown-item {
+  }
+  
+  .cta-button {
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(132, 204, 22, 0.3);
+  }
+  
+  .cta-button:hover {
+    transform: translateY(-2px)2
+    box-shadow: 0 8px 25px rgba(132, 204, 22, 0.4);
+  }
+  
+  @media (max-width: 768px) {
+    .hero-section {
+      background-attachment: scroll;
+    }
+  }
+</style>
+
+<section class="hero-section min-h-screen w-full flex items-center justify-center relative">
+  <div class="container mx-auto px-4 text-center text-white z-10">
+    <div class="max-w-4xl mx-auto">
+      <h1 class="kefir text-3xl md:text-4xl lg:text-5xl font-bold mb-6 leading-tight">
+        {% assign title_words = hero_title | split: ' ' %}
+        {% for word in title_words %}
+          <span class="block">{{ word }}</span>
+        {% endfor %}
+      </h1>
+      
+      <p class="text-sm md:text-base lg:text-lg mb-24 max-w-[450px] mx-auto opacity-90">
+        {{ hero_subtitle }}
+      </p>
+      
+      <a href="{{ cta_url }}" 
+         class="cta-button inline-block text-[#374E3C] bg-[#DDE893] font-light py-4 px-8 rounded-full text-base no-underline mb-2">
+        {{ cta_text }}
+      </a>
+      
+      {% if show_countdown %}
+        <div class="countdown-container">
+          <div id="countdown-timer" class="countdown-timer flex justify-center items-center space-x-2 md:space-x-4 text-2xl md:text-4xl">
+            <div class="countdown-item rounded-lg px-2 py-2 md:px-4 md:py-4">
+              <span id="days">00</span>
+              <div class="text-sm md:text-base opacity-75">Days</div>
+            </div>
+            <div class="countdown-item rounded-lg px-2 py-2 md:px-4 md:py-4">
+              <span id="hours">00</span>
+              <div class="text-sm md:text-base opacity-75">Hours</div>
+            </div>
+            <div class="countdown-item rounded-lg px-2 py-2 md:px-4 md:py-4">
+              <span id="minutes">00</span>
+              <div class="text-sm md:text-base opacity-75">Minutes</div>
+            </div>
+            <div class="countdown-item rounded-lg px-2 py-2 md:px-4 md:py-4">
+              <span id="seconds">00</span>
+              <div class="text-sm md:text-base opacity-75">Seconds</div>
+            </div>
+          </div>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+  
+  <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
+    <svg class="w-6 h-6 text-white opacity-75" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+    </svg>
+  </div>
+</section>
+
+{% if show_countdown %}
+<script>
+  const countdownTimer = () => {
+    const launchDate = new Date('{{ launch_date }}').getTime();
+    
+    const updateCountdown = () => {
+      const now = new Date().getTime();
+      const timeRemaining = launchDate - now;
+      
+      if (timeRemaining > 0) {
+        const days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
+        
+        document.getElementById('days').textContent = days.toString().padStart(2, '0');
+        document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
+        document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
+        document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
+      } else {
+        console.log("now available")
+      }
+    };
+    
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+  };
+  
+  document.addEventListener('DOMContentLoaded', countdownTimer);
+</script>
+{% endif %}
+
+<!-- Section Schema -->
+{% schema %}
+{
+  "name": "Hero Section with Countdown",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "hero_image",
+      "label": "Hero Background Image"
+    },
+    {
+      "type": "text",
+      "id": "hero_title",
+      "label": "Hero Title",
+      "default": "Gentle Effective Natural Baby-Safe"
+    },
+    {
+      "type": "textarea",
+      "id": "hero_subtitle",
+      "label": "Hero Subtitle",
+      "default": "Powered By Pure HOCl — Gentle, Effective, And Launching This November."
+    },
+    {
+      "type": "text",
+      "id": "cta_text",
+      "label": "CTA Button Text",
+      "default": "Pre-Order Now - Get 30% Off"
+    },
+    {
+      "type": "url",
+      "id": "cta_url",
+      "label": "CTA Button URL"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_countdown",
+      "label": "Show Countdown Timer",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "launch_date",
+      "label": "Launch Date (YYYY-MM-DDTHH:MM:SS)",
+      "default": "2025-8-30T00:00:00",
+      "info": "Format: 2024-11-30T00:00:00"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Hero with Countdown"
+    }
+  ]
+}
+{% endschema %}

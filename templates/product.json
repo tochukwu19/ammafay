@@ -1,0 +1,23 @@
+
+{
+  "sections": {
+    "product": {
+      "type": "template-product",
+      "settings": {
+        "details_title": "Details",
+        "details_content": "<p>Provide detailed information about the product here.</p>",
+        "advice_title": "Advice & Care",
+        "advice_content": "<p>Provide advice and care instructions for the product here.</p>",
+        "warranty_title": "Warranty",
+        "warranty_content": "<p>Provide warranty information for the product here.</p>"
+      }
+    },
+    "related-products": {
+      "type": "related-products"
+    } 
+  },
+  "order": [
+    "product",
+    "related-products"
+  ]
+}

@@ -1,0 +1,49 @@
+
+{
+  "sections": {
+    "home": {
+      "type": "template-hero",
+      "settings": {
+      }
+    },
+    "categories": {
+      "type": "template-categories",
+      "settings": {
+      }
+    },
+    "client": {
+      "type": "template-client",
+      "settings": {
+      }
+    },
+    "selection": {
+      "type": "template-selection",
+      "settings": {
+      }
+    },
+    "arrivals": {
+      "type": "template-arrivals",
+      "settings": {
+      }
+    },
+    "blog": {
+      "type": "template-blog",
+      "settings": {
+      }
+    },
+    "newsletter": {
+      "type": "template-newsletter",
+      "settings": {
+      }
+    }
+  },
+  "order": [
+    "home",
+    "categories",
+    "client",
+    "selection",
+    "arrivals",
+    "blog",
+    "newsletter"
+  ]
+}
