@@ -1,5 +1,6 @@
-{% assign main_menu_linklist = linklists[section.settings.menu].links %}
-{% assign social_menu_linklist = linklists[section.settings.socialmenu].links %}
+{% assign main_menu_linklist = linklists['main-menu'].links %}
+{% assign social_menu_linklist = linklists['social-menu'].links %}
+
 
 
 {% style %}
@@ -150,17 +151,7 @@ x-cloak
 {
 "name": "Header",
 "settings": [
-        {
-            "type": "link_list",
-            "id": "menu",
-            "label": "Menu links",
-            "default": "main-menu"
-        }, {
-            "type": "link_list",
-            "id": "socialmenu",
-            "label": "social menu links",
-            "default": "social-menu"
-        }
+
     ]
 }
 {% endschema %}
