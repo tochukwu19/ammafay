@@ -109,7 +109,7 @@
 
 <section class="features-section py-16 md:py-24">
   <div class="container w-[95%] md:w-[90%] mx-auto px-4">
-    <div class="grid h-auto md:h-[700px] lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+    <div class="grid h-auto lg:h-[700px] lg:grid-cols-2 gap-12 lg:gap-16 items-center">
       
       <div class="order-2 lg:order-1">
         <div class="section-badge w-fit">{{ section_title }}</div>
@@ -156,7 +156,7 @@
         </div>
       </div>
       
-      <div class="order-2 h-full">
+      <div class="order-2 h-full hidden md:block">
         <div class="product-carousel">
             <swiper-container class="products-swiper" init="false">
                 {% assign carousel_images = section.blocks | where: 'type', 'carousel_image' %}

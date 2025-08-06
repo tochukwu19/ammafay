@@ -181,11 +181,11 @@
 </style>
 
 <section class="coming-soon-section">
-  <div class="container w-[90%] md:w-[95%] mx-auto px-4">
+  <div class="container w-[90%] md:w-[85] mx-auto px-4">
     <h2 class="section-title kefir">{{ section.settings.section_title | default: 'Our Products' }}</h2>
     
     <div class="swiper-container-wrapper">
-      <swiper-container class="products-swiper" init="false">
+      <swiper-container class="products-swiper-2" init="false">
         {% if section.blocks.size > 0 %}
           {% for block in section.blocks %}
             {% case block.type %}
@@ -285,7 +285,7 @@
 <script>
   document.addEventListener('DOMContentLoaded', function() {
     setTimeout(() => {
-      const swiperContainer = document.querySelector('.products-swiper');
+      const swiperContainer = document.querySelector('.products-swiper-2');
       const prevButton = document.querySelector('.nav-button.prev');
       const nextButton = document.querySelector('.nav-button.next');
       
