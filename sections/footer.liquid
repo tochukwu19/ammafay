@@ -19,15 +19,15 @@
   }
 {% endstyle %}
 
-<div class="footer h-auto md:h-[350px] bg-[#ECECEC] w-full px-6 md:px-20 pt-16 flex items-start">
-  <div class="w-[90%] md:w-[75%] flex flex-col md:flex-row items-center md:items-start justify-between relative">
+<div class="footer h-auto md:h-[350px] bg-[#ECECEC] w-full px-6 md:px-20 py-16 md:pt-16 flex items-start">
+  <div class="w-[90%] mx-auto md:mx-0 md:w-[75%] flex flex-col gap-12 md:flex-row items-center md:items-start justify-between relative">
 
-    <div class="flex flex-col items-start">
+    <div class="flex flex-col gap-2 md:gap-0 items-center md:items-start">
       <img
         src="{{ 'Logo.png' | asset_url }}"
         alt="Logo"
-        class="h-12 w-auto mb-12" />
-      <p class="text-black font-medium mb-2">Follow us on socials</p>
+        class="h-12 w-auto md:mb-12" />
+      <p class="text-black text-lg font-[500] md:mb-2">Follow us on socials</p>
       <div class="flex items-center space-x-4 text-2xl">
         <a
           href="https://www.tiktok.com"
@@ -45,16 +45,16 @@
     </div>
 
     <div class="flex flex-col items-center text-center md:text-left md:items-start space-y-4 w-full max-w-xl">
-      <h2 class="text-black font-[500] text-lg">Be The First To Know When We Launch</h2>
+      <h2 class="text-black font-[500] text-base">Be The First To Know When We Launch</h2>
       <input
         type="email"
         placeholder="Enter your email address"
         class="w-full rounded-full bg-white px-6 py-3 text-sm focus:outline-none" />
-      <div class="flex w-full space-x-2">
+      <div class="flex flex-col sm:flex-row w-full space-x-0 sm:space-x-2">
         <input
           type="tel"
           placeholder="📞  Phone number"
-          class="flex-1 rounded-full bg-white px-6 py-3 text-sm focus:outline-none" />
+          class="flex-1 rounded-full bg-white px-6 py-3 mb-4 sm:mb-0 text-sm focus:outline-none" />
         <button class="bg-black text-white px-6 py-3 rounded-full font-medium hover:opacity-90 transition">
           Get Notified
         </button>

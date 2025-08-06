@@ -38,20 +38,6 @@
     overflow: hidden;
     box-shadow: 0 20px 40px rgba(0,0,0,0.1);
   }
-  
-  .swiper-slide {
-    background: #fff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  
-  .swiper-slide img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-  
   .swiper-pagination-bullet {
     background: rgba(255,255,255,0.5);
     opacity: 1;
@@ -80,13 +66,42 @@
     background: #000;
   }
 
+  .product-carousel {
+  width: 100%;
+  overflow: hidden;
+}
+
+.products-swiper {
+  width: 100% !important;
+  height: 100%;
+}
+
+.products-swiper swiper-slide {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100% !important;
+}
+
+.products-swiper swiper-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+@media (max-width: 1025px) {
+  .products-swiper {
+    height: 350px;
+  }
+}
+
   @media (max-width: 768px) {
     .product-carousel {
       height: 350px;
     }
     
     .section-badge::before {
-      left: -15px;
+      left: -35px;
       width: 30px;
     }
   }
@@ -94,10 +109,10 @@
 
 <section class="features-section py-16 md:py-24">
   <div class="container w-[95%] md:w-[90%] mx-auto px-4">
-    <div class="grid h-[700px] lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+    <div class="grid h-auto md:h-[700px] lg:grid-cols-2 gap-12 lg:gap-16 items-center">
       
       <div class="order-2 lg:order-1">
-        <div class="section-badge">{{ section_title }}</div>
+        <div class="section-badge w-fit">{{ section_title }}</div>
         
         <h2 class="kefir text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 mb-6 leading-tight">
           {{ main_heading }}
@@ -110,7 +125,7 @@
         <div class="mb-8">
           <h3 class="kefir text-2xl font-bold text-gray-900 mb-8">{{ feature_section_title }}</h3>
           
-          <div class="grid relative left-[-20px] grid-cols-2 md:grid-cols-3 gap-8">
+          <div class="grid relative md:left-[-20px] grid-cols-2 md:grid-cols-3 gap-8">
             {% for block in section.blocks %}
               {% case block.type %}
                 {% when 'feature' %}
@@ -141,48 +156,46 @@
         </div>
       </div>
       
-      <div class="order-1 lg:order-2 h-full">
-        <div class="product-carousel swiper">
-          <div class="swiper-wrapper">
-            {% assign carousel_images = section.blocks | where: 'type', 'carousel_image' %}
-            {% if carousel_images.size > 0 %}
-              {% for block in carousel_images %}
-                <div class="swiper-slide">
-                  {% if block.settings.image %}
-                    <img src="{{ block.settings.image | image_url: width: 600, height: 500 }}" 
-                         alt="{{ block.settings.alt_text | default: 'Product image' }}" 
-                         loading="lazy">
-                  {% else %}
+      <div class="order-2 h-full">
+        <div class="product-carousel">
+            <swiper-container class="products-swiper" init="false">
+                {% assign carousel_images = section.blocks | where: 'type', 'carousel_image' %}
+                {% if carousel_images.size > 0 %}
+                {% for block in carousel_images %}
+                    <swiper-slide>
+                    {% if block.settings.image %}
+                        <img src="{{ block.settings.image | image_url: width: 600, height: 500 }}"
+                            alt="{{ block.settings.alt_text | default: 'Product image' }}"
+                            loading="lazy">
+                    {% else %}
+                        <div class="w-full h-full bg-gradient-to-br from-blue-100 to-purple-100 flex items-center justify-center">
+                        <div class="text-center text-gray-500">
+                            <svg class="w-20 h-20 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                            </svg>
+                            <p class="text-lg font-medium">Product Image {{ forloop.index }}</p>
+                            <p class="text-sm text-gray-400 mt-1">Add image in theme editor</p>
+                        </div>
+                        </div>
+                    {% endif %}
+                    </swiper-slide>
+                {% endfor %}
+                {% else %}
+                {% for i in (1..3) %}
+                    <swiper-slide>
                     <div class="w-full h-full bg-gradient-to-br from-blue-100 to-purple-100 flex items-center justify-center">
-                      <div class="text-center text-gray-500">
+                        <div class="text-center text-gray-500">
                         <svg class="w-20 h-20 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
                         </svg>
-                        <p class="text-lg font-medium">Product Image {{ forloop.index }}</p>
-                        <p class="text-sm text-gray-400 mt-1">Add image in theme editor</p>
-                      </div>
+                        <p class="text-lg font-medium">Product Image {{ i }}</p>
+                        <p class="text-sm text-gray-400 mt-1">Add carousel images in theme editor</p>
+                        </div>
                     </div>
-                  {% endif %}
-                </div>
-              {% endfor %}
-            {% else %}
-              {% for i in (1..3) %}
-                <div class="swiper-slide">
-                  <div class="w-full h-full bg-gradient-to-br from-blue-100 to-purple-100 flex items-center justify-center">
-                    <div class="text-center text-gray-500">
-                      <svg class="w-20 h-20 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                      </svg>
-                      <p class="text-lg font-medium">Product Image {{ i }}</p>
-                      <p class="text-sm text-gray-400 mt-1">Add carousel images in theme editor</p>
-                    </div>
-                  </div>
-                </div>
-              {% endfor %}
-            {% endif %}
-          </div>
-          
-          <div class="swiper-pagination"></div>
+                    </swiper-slide>
+                {% endfor %}
+                {% endif %}
+            </swiper-container>
         </div>
       </div>
       
@@ -195,10 +208,10 @@
 <script>
   document.addEventListener('DOMContentLoaded', function() {
     setTimeout(() => {
-      const swiperContainer = document.querySelector('.product-carousel');
+      const swiperContainer = document.querySelector('.products-swiper');
       if (!swiperContainer) return;
       
-      const swiper = new Swiper('.product-carousel', {
+      const params = {
         loop: true,
         autoplay: {
           delay: 2000,
@@ -209,24 +222,33 @@
         fadeEffect: {
           crossFade: true
         },
-        
         pagination: {
           el: '.swiper-pagination',
           clickable: true,
           dynamicBullets: true,
         },
-        
-        on: {
-          init: function() {
-            this.el.addEventListener('mouseenter', () => {
-              this.autoplay.stop();
-            });
-            this.el.addEventListener('mouseleave', () => {
-              this.autoplay.start();
-            });
-          }
+        // Fix for mobile overflow
+        slidesPerView: 1,
+        spaceBetween: 0,
+        centeredSlides: true,
+        watchOverflow: true,
+      };
+      
+      Object.assign(swiperContainer, params);
+      swiperContainer.initialize();
+      
+      // Wait for initialization then add hover events
+      setTimeout(() => {
+        if (swiperContainer.swiper) {
+          swiperContainer.addEventListener('mouseenter', () => {
+            swiperContainer.swiper.autoplay.stop();
+          });
+          
+          swiperContainer.addEventListener('mouseleave', () => {
+            swiperContainer.swiper.autoplay.start();
+          });
         }
-      });
+      }, 200);
     }, 100);
   });
 </script>
