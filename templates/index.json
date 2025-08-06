@@ -1,55 +1,109 @@
-
 {
   "sections": {
     "home": {
       "type": "template-hero",
       "settings": {
+        "hero_title": "Gentle Effective Natural Baby-Safe",
+        "hero_subtitle": "Powered By Pure HOCl — Gentle, Effective, And Launching This November.",
+        "cta_text": "Pre-Order Now - Get 30% Off",
+        "cta_url": "",
+        "show_countdown": true,
+        "launch_date": "2025-08-30T00:00:00"
       }
     },
     "features": {
       "type": "template-features",
+      "blocks": {
+        "carousel_image_jnMiNG": {
+          "type": "carousel_image",
+          "settings": {
+            "image": "shopify://shop_images/Hero_image.jpg",
+            "alt_text": ""
+          }
+        },
+        "carousel_image_aYHXf4": {
+          "type": "carousel_image",
+          "settings": {
+            "image": "shopify://shop_images/Logo.png",
+            "alt_text": ""
+          }
+        },
+        "feature_TEiV4r": {
+          "type": "feature",
+          "settings": {
+            "title": "100% natural",
+            "description": ""
+          }
+        },
+        "feature_iwygNd": {
+          "type": "feature",
+          "settings": {
+            "title": "0+ months",
+            "description": ""
+          }
+        },
+        "feature_HtJnfd": {
+          "type": "feature",
+          "settings": {
+            "title": "Non-toxic",
+            "description": ""
+          }
+        },
+        "feature_NzmBDF": {
+          "type": "feature",
+          "settings": {
+            "title": "Additive free",
+            "description": ""
+          }
+        },
+        "feature_zwKAeB": {
+          "type": "feature",
+          "settings": {
+            "title": "alcohol free",
+            "description": ""
+          }
+        },
+        "feature_n4eVy7": {
+          "type": "feature",
+          "settings": {
+            "title": "earth friendly",
+            "description": ""
+          }
+        }
+      },
+      "block_order": [
+        "carousel_image_jnMiNG",
+        "carousel_image_aYHXf4",
+        "feature_TEiV4r",
+        "feature_iwygNd",
+        "feature_HtJnfd",
+        "feature_NzmBDF",
+        "feature_zwKAeB",
+        "feature_n4eVy7"
+      ],
       "settings": {
+        "section_title": "Why Hypochlorous Acid",
+        "main_heading": "Safe enough for babies. Strong enough for you.",
+        "description": "HOCl (Hypochlorous Acid) Is A Compound Your White Blood Cells Naturally Produce To Protect Against Germs. It's Been Used In Hospitals For Years To Clean Wounds And Support Healing — But It's Gentle Enough To Use On Your Baby's Hands, Skin, Toys Or Anything They Put In Their Mouth.",
+        "feature_section_title": "Clean without compromise"
       }
     },
     "categories": {
       "type": "template-categories",
       "settings": {
+        "collections": [],
+        "number_of_slides": 6
       }
     },
-    "client": {
-      "type": "template-client",
-      "settings": {
-      }
-    },
-    "selection": {
-      "type": "template-selection",
-      "settings": {
-      }
-    },
-    "arrivals": {
-      "type": "template-arrivals",
-      "settings": {
-      }
-    },
-    "blog": {
-      "type": "template-blog",
-      "settings": {
-      }
-    },
-    "newsletter": {
-      "type": "template-newsletter",
-      "settings": {
-      }
+    "story": {
+      "type": "template-story",
+      "settings": {}
     }
   },
   "order": [
     "home",
     "features",
     "categories",
-    "client",
-    "selection",
-    "arrivals",
-    "blog",
-    "newsletter"
+    "story"
   ]
 }

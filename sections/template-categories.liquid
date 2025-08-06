@@ -1,76 +1,120 @@
+<!-- Swiper CSS -->
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-element-bundle.min.js"></script>
 
-<style></style>
-
-<div class="w-[95%] mx-auto mb-8 !mt-32">
-  <div class="w-full my-4 flex flex-col justify-start">
-    <p class="w-[90%] md:w-[20%] uppercase font-[500] text-sm md:text-base">
-        SIGNATURE STYLES
-    </p>
-    <h2 class="w-[90%] calvino font-[500] text-[50px] md:text-[100px]">
-        Our Categories
-    </h2>
-  </div>
-
-  <div class="featured-collection mb-8">
-    <swiper-container class="mySwiper" init="false">
-      {% if section.settings.collections != blank %}
-        {% for collection in section.settings.collections limit: section.settings.number_of_slides %}
-          {% if collection.title != "Home page" %}
-            <swiper-slide>
-              {% render "collection-card"
-                , collection: collection %}
-            </swiper-slide>
-          {% endif %}
-        {% endfor %}
-
-      {% else %}
-
-        {% for collection in collections limit: section.settings.number_of_slides %}
-          {% if collection.title != "Home page" %}
-            <swiper-slide>
-              {% render "collection-card"
-                , collection: collection %}
-            </swiper-slide>
-          {% endif %}
-        {% endfor %}
-      {% endif %}
-    </swiper-container>
-    <div class="navigation-buttons"></div>
-  </div>
-</div>
-
-{% schema %}
-  {
-    "name": "Material Template",
-    "settings": [{
-        "type": "collection_list",
-        "id": "collections",
-        "label": "Collections",
-        "info": "Select the collections you want to display on this section."
-      }, {
-        "type": "range",
-        "id": "number_of_slides",
-        "label": "Number of slides",
-        "default": 6,
-        "min": 1,
-        "max": 10,
-        "step": 1
-      }
-    ]
+<style>
+  .coming-soon-section {
+    padding: 4rem 0;
+    background: #fafafa;
   }
-{% endschema %}
-
-<script>  
-  const swiperContainer = document.querySelector('swiper-container');
-  const wrapper = document.createElement('div');
-  wrapper.className = 'swiper-container-wrapper';
-  swiperContainer.parentNode.insertBefore(wrapper, swiperContainer);
-  wrapper.appendChild(swiperContainer);
   
-  // Add styles and create navigation
-  const style = document.createElement('style');
-  style.textContent = `
+  .section-title {
+    text-align: center;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #1f2937;
+    margin-bottom: 3rem;
+  }
+  
+  .product-card {
+    overflow: hidden;
+    transition: all 0.3s ease;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .product-card:hover {
+    transform: translateY(-5px);
+  }
+  
+  .product-image-container {
+    position: relative;
+    aspect-ratio: 1;
+    background: #f3f4f6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  
+  .product-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+  }
+  
+  .product-card:hover .product-image {
+    transform: scale(1.05);
+  }
+  
+  .coming-soon-badge {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    background: white;
+    color: black;
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+  }
+  
+  .product-info {
+    padding-top: 1.5rem;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .product-title {
+    font-size: 1.25rem;
+    font-weight: 500;
+    color: #000;
+    margin-bottom: 0.5rem;
+    line-height: 1.3;
+  }
+  
+  .product-size {
+    color: #6b7280;
+    font-size: 0.875rem;
+    margin-bottom: 1.5rem;
+    font-weight: 400;
+  }
+  
+  .product-actions {
+    margin-top: auto;
+  }
+  
+  .pre-order-btn {
+    width: fit-content;
+    margin-left: auto;
+    background: #DDE893;
+    color: #374E3C;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 25px;
+    font-weight: 600;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: block;
+    text-align: center;
+    margin-bottom: 0.75rem;
+  }
+  
+  .pre-order-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(132, 204, 22, 0.3);
+  }
+  
+  .discount-text {
+    text-align: right;
+    color: #000;
+    font-size: 0.875rem;
+    font-weight: 500;
+  }
+  
   .swiper-container-wrapper {
     position: relative;
     width: 100%;
@@ -78,95 +122,338 @@
   
   .navigation-buttons {
     position: absolute;
-    bottom: -30px;
+    top: -4rem;
     right: 0;
     display: flex;
-    gap: 20px;
+    gap: 1rem;
     z-index: 10;
+  }
+  
+  .nav-button {
+    width: 48px;
+    height: 48px;
+    border: 2px solid #e5e7eb;
+    border-radius: 50%;
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .nav-button:hover {
+    border-color: #84cc16;
+    background: #84cc16;
+  }
+  
+  .nav-button:hover svg path {
+    fill: white;
   }
   
   .nav-button.disabled {
     opacity: 0.35;
     cursor: not-allowed;
+    pointer-events: none;
   }
   
-  `;
-  document.head.appendChild(style);
-  
-  // Create navigation container and buttons
-  const navigationContainer = document.createElement('div');
-  navigationContainer.className = 'navigation-buttons';
-  
-  const prevButton = document.createElement('button');
-  prevButton.className = 'nav-button prev';
-  prevButton.innerHTML = `
-  <svg class="custom-arrow" width="7" height="12" viewBox="0 0 7 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M0.46957 6.53033C0.176677 6.23744 0.176677 5.76256 0.46957 5.46967L5.24254 0.696699C5.53543 0.403806 6.01031 0.403806 6.3032 0.696699C6.59609 0.989593 6.59609 1.46447 6.3032 1.75736L2.06056 6L6.3032 10.2426C6.59609 10.5355 6.59609 11.0104 6.3032 11.3033C6.01031 11.5962 5.53543 11.5962 5.24254 11.3033L0.46957 6.53033ZM1 6.75H0.9999V5.25H1V6.75Z" fill="#9CA3AF"/>
-    </svg>
-  `;
-  
-  const nextButton = document.createElement('button');
-  nextButton.className = 'nav-button next';
-  nextButton.innerHTML = `
-  <svg class="custom-arrow" width="7" height="12" viewBox="0 0 7 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M6.53043 6.53033C6.82332 6.23744 6.82332 5.76256 6.53043 5.46967L1.75746 0.696699C1.46457 0.403806 0.989692 0.403806 0.696799 0.696699C0.403906 0.989593 0.403906 1.46447 0.696799 1.75736L4.93944 6L0.696799 10.2426C0.403906 10.5355 0.403906 11.0104 0.696799 11.3033C0.989692 11.5962 1.46457 11.5962 1.75746 11.3033L6.53043 6.53033ZM6 6.75H6.0001V5.25H6V6.75Z" fill="#9CA3AF"/>
-    </svg>
-  `;
-  
-  navigationContainer.appendChild(prevButton);
-  navigationContainer.appendChild(nextButton);
-  wrapper.appendChild(navigationContainer);
-  
-  // Initialize Swiper
-  const params = {
-  breakpoints: {
-    640: {
-      slidesPerView: 1,
-      spaceBetween: 20,
-    },
-    768: {
-      slidesPerView: 2,
-      spaceBetween: 20,
-    },
-    1024: {
-      slidesPerView: 3,
-      spaceBetween: 20,
-    },
+  .placeholder-image {
+    width: 60%;
+    height: 60%;
+    background: linear-gradient(135deg, #f3f4f6, #e5e7eb);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
-  };
   
-  Object.assign(swiperContainer, params);
-  swiperContainer.initialize();
-  
-  // Add click handlers for navigation
-  prevButton.addEventListener('click', () => {
-  swiperContainer.swiper.slidePrev();
-  updateButtonStates();
+  @media (max-width: 768px) {
+    .section-title {
+      font-size: 2rem;
+    }
+    
+    .navigation-buttons {
+      position: static;
+      justify-content: center;
+      margin-top: 2rem;
+    }
+  }
+</style>
+
+<section class="coming-soon-section">
+  <div class="container w-[90%] md:w-[95%] mx-auto px-4">
+    <h2 class="section-title kefir">{{ section.settings.section_title | default: 'Our Products' }}</h2>
+    
+    <div class="swiper-container-wrapper">
+      <swiper-container class="products-swiper" init="false">
+        {% if section.blocks.size > 0 %}
+          {% for block in section.blocks %}
+            {% case block.type %}
+              {% when 'product' %}
+                <swiper-slide>
+                  <div class="product-card">
+                    <div class="product-image-container">
+                      {% if block.settings.product_image %}
+                        <img src="{{ block.settings.product_image | image_url: width: 400, height: 400 }}" 
+                             alt="{{ block.settings.product_title | default: 'Coming Soon Product' }}" 
+                             class="product-image"
+                             loading="lazy">
+                      {% else %}
+                        <div class="placeholder-image">
+                          <svg class="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+                          </svg>
+                        </div>
+                      {% endif %}
+                      
+                      <div class="coming-soon-badge">
+                        {{ block.settings.badge_text | default: 'Coming Soon' }}
+                      </div>
+                    </div>
+                    
+                    <div class="product-info">
+                      <h3 class="product-title">
+                        {{ block.settings.product_title | default: 'Product Name' }}
+                      </h3>
+                      
+                      {% if block.settings.product_size %}
+                        <p class="product-size">{{ block.settings.product_size }}</p>
+                      {% endif %}
+                      
+                      <div class="product-actions">
+                        <a href="{{ block.settings.pre_order_url | default: '#' }}" 
+                           class="pre-order-btn">
+                          {{ block.settings.button_text | default: 'Pre-Order Now' }}
+                        </a>
+                        
+                        {% if block.settings.discount_text %}
+                          <p class="discount-text">{{ block.settings.discount_text }}</p>
+                        {% endif %}
+                      </div>
+                    </div>
+                  </div>
+                </swiper-slide>
+            {% endcase %}
+          {% endfor %}
+        {% else %}
+          {% assign default_products = 'Infant & Toddler Hand Cleaner,Infant & Toddler Skin Repair,Toy & Surface Cleaner, Strong and Gold, Black Star' | split: ',' %}
+          {% assign default_sizes = '100ml,100ml,100ml,50ml,50ml' | split: ',' %}
+          
+          {% for product_name in default_products %}
+            <swiper-slide>
+              <div class="product-card">
+                <div class="product-image-container">
+                  <div class="placeholder-image">
+                    <svg class="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+                    </svg>
+                  </div>
+                  <div class="coming-soon-badge">Coming Soon</div>
+                </div>
+                
+                <div class="product-info">
+                  <h3 class="product-title">{{ product_name }}</h3>
+                  <p class="product-size">{{ default_sizes[forloop.index0] }}</p>
+                  
+                  <div class="product-actions">
+                    <a href="#" class="pre-order-btn">Pre-Order Now</a>
+                    <p class="discount-text">Get 30% Off</p>
+                  </div>
+                </div>
+              </div>
+            </swiper-slide>
+          {% endfor %}
+        {% endif %}
+      </swiper-container>
+      
+      <div class="navigation-buttons">
+        <button class="nav-button prev" aria-label="Previous products">
+          <svg width="7" height="12" viewBox="0 0 7 12" fill="none">
+            <path d="M0.46957 6.53033C0.176677 6.23744 0.176677 5.76256 0.46957 5.46967L5.24254 0.696699C5.53543 0.403806 6.01031 0.403806 6.3032 0.696699C6.59609 0.989593 6.59609 1.46447 6.3032 1.75736L2.06056 6L6.3032 10.2426C6.59609 10.5355 6.59609 11.0104 6.3032 11.3033C6.01031 11.5962 5.53543 11.5962 5.24254 11.3033L0.46957 6.53033ZM1 6.75H0.9999V5.25H1V6.75Z" fill="#9CA3AF"/>
+          </svg>
+        </button>
+        <button class="nav-button next" aria-label="Next products">
+          <svg width="7" height="12" viewBox="0 0 7 12" fill="none">
+            <path d="M6.53043 6.53033C6.82332 6.23744 6.82332 5.76256 6.53043 5.46967L1.75746 0.696699C1.46457 0.403806 0.989692 0.403806 0.696799 0.696699C0.403906 0.989593 0.403906 1.46447 0.696799 1.75736L4.93944 6L0.696799 10.2426C0.403906 10.5355 0.403906 11.0104 0.696799 11.3033C0.989692 11.5962 1.46457 11.5962 1.75746 11.3033L6.53043 6.53033ZM6 6.75H6.0001V5.25H6V6.75Z" fill="#9CA3AF"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    setTimeout(() => {
+      const swiperContainer = document.querySelector('.products-swiper');
+      const prevButton = document.querySelector('.nav-button.prev');
+      const nextButton = document.querySelector('.nav-button.next');
+      
+      if (!swiperContainer) return;
+      
+      const params = {
+        spaceBetween: 24,
+        loop: false,
+        grabCursor: true,
+        navigation: false, 
+        breakpoints: {
+          320: {
+            slidesPerView: 1,
+            spaceBetween: 16,
+          },
+          640: {
+            slidesPerView: 2,
+            spaceBetween: 20,
+          },
+          1024: {
+            slidesPerView: 3,
+            spaceBetween: 24,
+          },
+          1280: {
+            slidesPerView: 4,
+            spaceBetween: 24,
+          }
+        }
+      };
+      
+      Object.assign(swiperContainer, params);
+      swiperContainer.initialize();
+      
+      const checkSwiper = () => {
+        if (swiperContainer.swiper) {
+          setupNavigation();
+        } else {
+          setTimeout(checkSwiper, 50);
+        }
+      };
+      
+      checkSwiper();
+      
+      function setupNavigation() {
+        if (prevButton && nextButton) {
+          prevButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            swiperContainer.swiper.slidePrev();
+            updateButtonStates();
+          });
+          
+          nextButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            swiperContainer.swiper.slideNext();
+            updateButtonStates();
+          });
+          
+          function updateButtonStates() {
+            const swiper = swiperContainer.swiper;
+            
+            prevButton.classList.remove('disabled');
+            nextButton.classList.remove('disabled');
+            
+            if (swiper.isBeginning) {
+              prevButton.classList.add('disabled');
+            }
+            
+            if (swiper.isEnd) {
+              nextButton.classList.add('disabled');
+            }
+          }
+          
+          swiperContainer.addEventListener('slidechange', updateButtonStates);
+          
+          updateButtonStates();
+        }
+      }
+    }, 100);
   });
-  
-  nextButton.addEventListener('click', () => {
-  swiperContainer.swiper.slideNext();
-  updateButtonStates();
-  });
-  
-  // Function to update button states
-  function updateButtonStates() {
-  if (swiperContainer.swiper.isBeginning) {
-    prevButton.classList.add('disabled');
-  } else {
-    prevButton.classList.remove('disabled');
-  }
-  
-  if (swiperContainer.swiper.isEnd) {
-    nextButton.classList.add('disabled');
-  } else {
-    nextButton.classList.remove('disabled');
-  }
-  }
-  
-  // Listen for swiper events to update button states
-  swiperContainer.addEventListener('slidechange', updateButtonStates);
-  
-  // Initial button state
-  updateButtonStates();
 </script>
+
+{% schema %}
+{
+  "name": "Coming Soon Products",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "section_title",
+      "label": "Section Title",
+      "default": "Our Products"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "product",
+      "name": "Product",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "product_image",
+          "label": "Product Image"
+        },
+        {
+          "type": "text",
+          "id": "product_title",
+          "label": "Product Title",
+          "default": "Product Name"
+        },
+        {
+          "type": "text",
+          "id": "product_size",
+          "label": "Product Size/Details",
+          "default": "100ml"
+        },
+        {
+          "type": "text",
+          "id": "badge_text",
+          "label": "Badge Text",
+          "default": "Coming Soon"
+        },
+        {
+          "type": "text",
+          "id": "button_text",
+          "label": "Button Text",
+          "default": "Pre-Order Now"
+        },
+        {
+          "type": "url",
+          "id": "pre_order_url",
+          "label": "Pre-Order URL"
+        },
+        {
+          "type": "text",
+          "id": "discount_text",
+          "label": "Discount Text",
+          "default": "Get 30% Off"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Coming Soon Products",
+      "blocks": [
+        {
+          "type": "product",
+          "settings": {
+            "product_title": "Infant & Toddler Hand Cleaner",
+            "product_size": "100ml"
+          }
+        },
+        {
+          "type": "product",
+          "settings": {
+            "product_title": "Infant & Toddler Skin Repair",
+            "product_size": "100ml"
+          }
+        },
+        {
+          "type": "product",
+          "settings": {
+            "product_title": "Toy & Surface Cleaner",
+            "product_size": "100ml"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

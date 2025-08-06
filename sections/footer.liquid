@@ -1,4 +1,11 @@
 {% style %}
+  .footer {
+    background-image: url("https://cdn.shopify.com/s/files/1/0945/3669/6115/files/footer_illustration.png");
+    background-repeat: no-repeat;
+    background-size: 200px;
+    background-position: bottom right;
+  }
+
   .footer-logo {
     text-align: justify;
     font-size: clamp(5.5vw, 10.5vw, 15.5vw);
@@ -12,35 +19,46 @@
   }
 {% endstyle %}
 
-<div class="footer h-auto pt-32 w-full">
-  <div class="container gap-[20px] md:gap-0 flex flex-col items-center justify-around mx-auto">
-    <div class="w-[90%] mx-auto flex justify-between items-start flex-col md:flex-row">
-      <nav class="flex w-full mx-auto gap-4 flex-col md:flex-row justify-between items-start [&>div>h1]:mb-4 flex-wrap">
-        {% for link in linklists['footer'].links %}
-          {% if link.links != blank %}
-            <div class="mb-8 md:mb-0 [&>ul>a]:block [&>ul>a]:text-[#4B5563] [&>ul>a]:my-2">
-              <h1 class="font-[500] uppercase text-[#111827]">{{ link.title }}</h1>
-              <ul>
-                {% for sublink in link.links %}
-                  <a href="{{ sublink.url }}" class="hover:underline">
-                    <li>{{ sublink.title }}</li>
-                  </a>
-                {% endfor %}
-              </ul>
-            </div>
-          {% endif %}
-        {% endfor %}
+<div class="footer h-auto md:h-[350px] bg-[#ECECEC] w-full px-6 md:px-20 pt-16 flex items-start">
+  <div class="w-[90%] md:w-[75%] flex flex-col md:flex-row items-center md:items-start justify-between relative">
 
-        {% comment %} Language {% endcomment %}
-        <div class="mb-8 md:mb-0 [&>ul>li]:text-[#4B5563] [&>ul>li]:my-2">
-          <h1 class="font-[500] uppercase text-[#111827]">Language/Currency</h1>
-          <ul>
-              <li class="">{{ shop.locale }} / {{ shop.currency }}</li>
-          </ul>
-        </div>
-      </nav>
+    <div class="flex flex-col items-start">
+      <img
+        src="{{ 'Logo.png' | asset_url }}"
+        alt="Logo"
+        class="h-12 w-auto mb-12" />
+      <p class="text-black font-medium mb-2">Follow us on socials</p>
+      <div class="flex items-center space-x-4 text-2xl">
+        <a
+          href="https://www.tiktok.com"
+          target="_blank"
+          rel="noopener">
+          {% render 'icon-tiktok' %}
+        </a>
+        <a
+          href="https://www.instagram.com"
+          target="_blank"
+          rel="noopener">
+          {% render 'icon-insta' %}
+        </a>
+      </div>
     </div>
 
-    <div class="footer-logo flex justify-center items-center gap-2 truncate my-8 calvino"></div>
+    <div class="flex flex-col items-center text-center md:text-left md:items-start space-y-4 w-full max-w-xl">
+      <h2 class="text-black font-[500] text-lg">Be The First To Know When We Launch</h2>
+      <input
+        type="email"
+        placeholder="Enter your email address"
+        class="w-full rounded-full bg-white px-6 py-3 text-sm focus:outline-none" />
+      <div class="flex w-full space-x-2">
+        <input
+          type="tel"
+          placeholder="📞  Phone number"
+          class="flex-1 rounded-full bg-white px-6 py-3 text-sm focus:outline-none" />
+        <button class="bg-black text-white px-6 py-3 rounded-full font-medium hover:opacity-90 transition">
+          Get Notified
+        </button>
+      </div>
+    </div>
   </div>
 </div>
