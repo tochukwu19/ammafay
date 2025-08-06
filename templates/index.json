@@ -6,6 +6,11 @@
       "settings": {
       }
     },
+    "features": {
+      "type": "template-features",
+      "settings": {
+      }
+    },
     "categories": {
       "type": "template-categories",
       "settings": {
@@ -39,6 +44,7 @@
   },
   "order": [
     "home",
+    "features",
     "categories",
     "client",
     "selection",

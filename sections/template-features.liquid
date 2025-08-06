@@ -1,0 +1,355 @@
+<!-- Features Section Schema -->
+{%- liquid
+  assign section_title = section.settings.section_title | default: 'Why Hypochlorous Acid'
+  assign main_heading = section.settings.main_heading | default: 'Safe enough for babies. Strong enough for you.'
+  assign description = section.settings.description | default: "HOCl (Hypochlorous Acid) Is A Compound Your White Blood Cells Naturally Produce To Protect Against Germs. It's Been Used In Hospitals For Years To Clean Wounds And Support Healing — But It's Gentle Enough To Use On Your Baby's Hands, Skin, Toys, Or Anything They Put In Their Mouth."
+  assign feature_section_title = section.settings.feature_section_title | default: 'Clean without compromise'
+-%}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/8.4.7/swiper-bundle.min.css">
+
+<style>
+  .features-section {
+    background: #f8f9fa;
+  }
+  
+  .feature-icon-placeholder {
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, #f3e8ff, #e5e7eb);
+    border: 2px solid #d1d5db;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    color: #6b7280;
+    margin: 0 auto 1rem;
+    transition: all 0.3s ease;
+  }
+  
+  .feature-item:hover .feature-icon-placeholder {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+  }
+  
+  .product-carousel {
+    height: 500px;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+  }
+  
+  .swiper-slide {
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .swiper-slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .swiper-pagination-bullet {
+    background: rgba(255,255,255,0.5);
+    opacity: 1;
+  }
+  
+  .swiper-pagination-bullet-active {
+    background: #fff;
+  }
+  
+  .section-badge {
+    display: inline-block;
+    padding: 8px 16px;
+    background: rgba(0,0,0,0.05);
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #374151;
+    margin-bottom: 1rem;
+    position: relative;
+  }
+  
+  .section-badge::before {
+    content: '';
+    position: absolute;
+    left: -20px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 40px;
+    height: 1px;
+    background: #d1d5db;
+  }
+
+  @media (max-width: 768px) {
+    .product-carousel {
+      height: 350px;
+    }
+    
+    .section-badge::before {
+      left: -15px;
+      width: 30px;
+    }
+  }
+</style>
+
+<section class="features-section py-16 md:py-24">
+  <div class="container mx-auto px-4">
+    <div class="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+      
+      <div class="order-2 lg:order-1">
+        <!-- Section Badge -->
+        <div class="section-badge">{{ section_title }}</div>
+        
+        <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-6 leading-tight">
+          {{ main_heading }}
+        </h2>
+        
+        <p class="text-gray-600 text-lg leading-relaxed mb-12">
+          {{ description }}
+        </p>
+        
+        <div class="mb-8">
+          <h3 class="text-2xl font-bold text-gray-900 mb-8">{{ feature_section_title }}</h3>
+          
+          <div class="grid grid-cols-2 md:grid-cols-3 gap-8">
+            {% for block in section.blocks %}
+              {% case block.type %}
+                {% when 'feature' %}
+                  <div class="feature-item text-center">
+                    <!-- Feature Icon Placeholder -->
+                    <div class="feature-icon-placeholder">
+                      {% if block.settings.icon_image %}
+                        <img src="{{ block.settings.icon_image | image_url: width: 40 }}" 
+                             alt="{{ block.settings.title }}" 
+                             class="w-8 h-8 object-contain">
+                      {% else %}
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                          <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                        </svg>
+                      {% endif %}
+                    </div>
+                    
+                    <h4 class="font-semibold text-gray-900 text-base">
+                      {{ block.settings.title | default: 'Feature Title' }}
+                    </h4>
+                    
+                    {% if block.settings.description %}
+                      <p class="text-sm text-gray-600 mt-2">{{ block.settings.description }}</p>
+                    {% endif %}
+                  </div>
+              {% endcase %}
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+      
+      <div class="order-1 lg:order-2">
+        <div class="product-carousel swiper">
+          <div class="swiper-wrapper">
+            {% for block in section.blocks %}
+              {% case block.type %}
+                {% when 'carousel_image' %}
+                  <div class="swiper-slide">
+                    {% if block.settings.image %}
+                      <img src="{{ block.settings.image | image_url: width: 600, height: 500 }}" 
+                           alt="{{ block.settings.alt_text | default: 'Product image' }}" 
+                           loading="lazy">
+                    {% else %}
+                      <div class="w-full h-full bg-gray-200 flex items-center justify-center">
+                        <div class="text-center text-gray-400">
+                          <svg class="w-16 h-16 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                          </svg>
+                          <p class="text-sm">Product Image</p>
+                        </div>
+                      </div>
+                    {% endif %}
+                  </div>
+              {% endcase %}
+            {% endfor %}
+          </div>
+          
+          <div class="swiper-pagination"></div>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+</section>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/8.4.7/swiper-bundle.min.js"></script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const swiper = new Swiper('.product-carousel', {
+      // Carousel settings
+      loop: true,
+      autoplay: {
+        delay: 4000,
+        disableOnInteraction: false,
+        pauseOnMouseEnter: true,
+      },
+      effect: 'fade',
+      fadeEffect: {
+        crossFade: true
+      },
+      speed: 800,
+      
+      // Pagination
+      pagination: {
+        el: '.swiper-pagination',
+        clickable: true,
+        dynamicBullets: true,
+      },
+      
+      // Responsive breakpoints
+      breakpoints: {
+        640: {
+          effect: 'slide',
+        }
+      },
+      
+      // Accessibility
+      a11y: {
+        prevSlideMessage: 'Previous slide',
+        nextSlideMessage: 'Next slide',
+        paginationBulletMessage: 'Go to slide {{index}}',
+      },
+    });
+    
+    // Pause autoplay on reduced motion preference
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      swiper.autoplay.stop();
+    }
+  });
+</script>
+
+<!-- Section Schema -->
+{% schema %}
+{
+  "name": "Features with Carousel",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "section_title",
+      "label": "Section Badge Text",
+      "default": "Why Hypochlorous Acid"
+    },
+    {
+      "type": "text",
+      "id": "main_heading",
+      "label": "Main Heading",
+      "default": "Safe enough for babies. Strong enough for you."
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "HOCl (Hypochlorous Acid) Is A Compound Your White Blood Cells Naturally Produce To Protect Against Germs. It's Been Used In Hospitals For Years To Clean Wounds And Support Healing — But It's Gentle Enough To Use On Your Baby's Hands, Skin, Toys Or Anything They Put In Their Mouth."
+    },
+    {
+      "type": "text",
+      "id": "feature_section_title",
+      "label": "Features Section Title",
+      "default": "Clean without compromise"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "feature",
+      "name": "Feature",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "icon_image",
+          "label": "Feature Icon"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Feature Title"
+        },
+        {
+          "type": "text",
+          "id": "description",
+          "label": "Feature Description (Optional)"
+        }
+      ]
+    },
+    {
+      "type": "carousel_image",
+      "name": "Carousel Image",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Product Image"
+        },
+        {
+          "type": "text",
+          "id": "alt_text",
+          "label": "Image Alt Text"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Features with Carousel",
+      "blocks": [
+        {
+          "type": "feature",
+          "settings": {
+            "title": "100% Natural"
+          }
+        },
+        {
+          "type": "feature",
+          "settings": {
+            "title": "0+ Months"
+          }
+        },
+        {
+          "type": "feature",
+          "settings": {
+            "title": "Non-Toxic"
+          }
+        },
+        {
+          "type": "feature",
+          "settings": {
+            "title": "Additive Free"
+          }
+        },
+        {
+          "type": "feature",
+          "settings": {
+            "title": "Alcohol Free"
+          }
+        },
+        {
+          "type": "feature",
+          "settings": {
+            "title": "Earth Friendly"
+          }
+        },
+        {
+          "type": "carousel_image"
+        },
+        {
+          "type": "carousel_image"
+        },
+        {
+          "type": "carousel_image"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
