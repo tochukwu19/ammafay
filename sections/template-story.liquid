@@ -90,7 +90,7 @@
       {% if section.settings.story_image_2 %}
         <img src="{{ image_2 | image_url: width: 800 }}" alt="Story Image 2" class="absolute h-[250px] sm:h-[350px] md:h-[400px] translate-x-12 md:translate-x-28 rotate-30 z-3 transition-transform duration-300 hover:scale-105" />
       {% else %}
-        <img src="{{ 'Story.png' | file_img_url: 'master' }}" alt="Story Image 2" class="absolute h-[250px] sm:h-[350px] md:h-[400px] translate-x-12 md:translate-x-28 rotate-30 z-3 transition-transform duration-300 hover:scale-105" />
+        <img src="{{ 'Story.png' | file_img_url: 'master' }}" alt="Story Image 2" class="absolute h-[250px] sm:h-[350px] md:h-[400px] translate-x-12 md:translate-x-28 z-3 transition-transform duration-300 hover:scale-105" />
       {% endif %}
     </div>
   </div>
