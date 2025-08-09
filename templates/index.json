@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "home": {
@@ -17,20 +26,28 @@
         "carousel_image_jnMiNG": {
           "type": "carousel_image",
           "settings": {
-            "image": "shopify://shop_images/Hero_image.jpg",
+            "image": "shopify://shop_images/Carousel_image.png",
             "alt_text": ""
           }
         },
         "carousel_image_aYHXf4": {
           "type": "carousel_image",
           "settings": {
-            "image": "shopify://shop_images/Logo.png",
+            "image": "shopify://shop_images/Carousel_image_1.png",
+            "alt_text": ""
+          }
+        },
+        "carousel_image_NrcdJX": {
+          "type": "carousel_image",
+          "settings": {
+            "image": "shopify://shop_images/Carousel_image_2.png",
             "alt_text": ""
           }
         },
         "feature_TEiV4r": {
           "type": "feature",
           "settings": {
+            "icon_image": "shopify://shop_images/Natural.png",
             "title": "100% natural",
             "description": ""
           }
@@ -38,6 +55,7 @@
         "feature_iwygNd": {
           "type": "feature",
           "settings": {
+            "icon_image": "shopify://shop_images/ZeroMonths.png",
             "title": "0+ months",
             "description": ""
           }
@@ -45,6 +63,7 @@
         "feature_HtJnfd": {
           "type": "feature",
           "settings": {
+            "icon_image": "shopify://shop_images/NonToxic.png",
             "title": "Non-toxic",
             "description": ""
           }
@@ -52,6 +71,7 @@
         "feature_NzmBDF": {
           "type": "feature",
           "settings": {
+            "icon_image": "shopify://shop_images/AdditiveFree.png",
             "title": "Additive free",
             "description": ""
           }
@@ -59,6 +79,7 @@
         "feature_zwKAeB": {
           "type": "feature",
           "settings": {
+            "icon_image": "shopify://shop_images/AlcoholFree.png",
             "title": "alcohol free",
             "description": ""
           }
@@ -66,6 +87,7 @@
         "feature_n4eVy7": {
           "type": "feature",
           "settings": {
+            "icon_image": "shopify://shop_images/EarthFriendly.png",
             "title": "earth friendly",
             "description": ""
           }
@@ -74,6 +96,7 @@
       "block_order": [
         "carousel_image_jnMiNG",
         "carousel_image_aYHXf4",
+        "carousel_image_NrcdJX",
         "feature_TEiV4r",
         "feature_iwygNd",
         "feature_HtJnfd",
@@ -91,13 +114,20 @@
     "categories": {
       "type": "template-categories",
       "settings": {
-        "collections": [],
-        "number_of_slides": 6
+        "section_title": "Our Products"
       }
     },
     "story": {
       "type": "template-story",
-      "settings": {}
+      "settings": {
+        "story_heading": "Made for parents. By parents.",
+        "story_text": "We're not a big beauty lab or a faceless brand — we're parents, just like you. Amma & Fay was born from late-night Google searches, label-reading marathons, and the deep desire to give our kids something better.",
+        "show_story_link": false,
+        "story_link_text": "Our Story — Amma & fay",
+        "story_link_url": "",
+        "story_image_1": "shopify://shop_images/Frame_292_1.png",
+        "story_image_2": "shopify://shop_images/Frame_292_2.png"
+      }
     }
   },
   "order": [
