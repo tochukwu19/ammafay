@@ -1,20 +1,97 @@
+{% schema %}
+{
+  "name": "Story Section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Story Content"
+    },
+    {
+      "type": "text",
+      "id": "story_heading",
+      "label": "Main Heading",
+      "default": "Made for parents. By parents."
+    },
+    {
+      "type": "textarea",
+      "id": "story_text",
+      "label": "Story Text",
+      "default": "We're not a big beauty lab or a faceless brand — we're parents, just like you. Amma & Fay was born from late-night Google searches, label-reading marathons, and the deep desire to give our kids something better."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_story_link",
+      "label": "Show Story Link",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "story_link_text",
+      "label": "Story Link Text",
+      "default": "Our Story — Amma & fay"
+    },
+    {
+      "type": "url",
+      "id": "story_link_url",
+      "label": "Story Link URL"
+    },
+    {
+      "type": "header",
+      "content": "Images"
+    },
+    {
+      "type": "image_picker",
+      "id": "story_image_1",
+      "label": "Story Image 1"
+    },
+    {
+      "type": "image_picker",
+      "id": "story_image_2",
+      "label": "Story Image 2"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Story Section"
+    }
+  ]
+}
+{% endschema %}
+
 <div class="w-[90%] mx-auto my-32">
   <div class="w-full mx-auto text-left flex flex-col md:flex-row items-center justify-between">
     <div class="w-[95%] md:w-1/3 mb-4 md:mb-0">
       <h2 class="kefir text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 mb-6 leading-tight">
-        Made for parents. <br/>By parents.
+        {{ section.settings.story_heading | default: 'Made for parents. By parents.' | newline_to_br }}
       </h2>
-
+       
       <p class="text-lg mb-12">
-        We’re not a big beauty lab or a faceless brand — we’re parents, just like you. Amma & Fay was born from late-night Google searches, label-reading marathons, and the deep desire to give our kids something better.
+        {{ section.settings.story_text | default: "We're not a big beauty lab or a faceless brand — we're parents, just like you. Amma & Fay was born from late-night Google searches, label-reading marathons, and the deep desire to give our kids something better." }}
       </p>
-
-      {% comment %} <a class="text-base font-[500] hover:underline flex items-center gap-2">Our Story — Amma & fay {% render 'icon-right' %}</a> {% endcomment %}
+       
+      {% if section.settings.show_story_link and section.settings.story_link_url != blank %}
+        <a href="{{ section.settings.story_link_url }}" class="text-base font-[500] hover:underline flex items-center gap-2">
+          {{ section.settings.story_link_text | default: 'Our Story — Amma & fay' }}
+          {% render 'icon-right' %}
+        </a>
+      {% endif %}
     </div>
-
+     
     <div class="relative w-full md:w-1/2 flex items-center justify-center h-[250px] sm:h-[350px] md:h-[400px]">
-      <img src="{{ 'Story.png' | file_img_url: 'master' }}" class="absolute h-[250px] sm:h-[350px] md:h-[400px] -translate-x-12 md:-translate-x-28 z-1 transition-transform duration-300 hover:scale-105" />
-      <img src="{{ 'Story.png' | file_img_url: 'master' }}" class="absolute h-[250px] sm:h-[350px] md:h-[400px] translate-x-12 md:translate-x-28 rotate-30 z-3 transition-transform duration-300 hover:scale-105" /> 
+      {% assign image_1 = section.settings.story_image_1 | default: 'Story.png' %}
+      {% assign image_2 = section.settings.story_image_2 | default: section.settings.story_image_1 | default: 'Story.png' %}
+      
+      {% if section.settings.story_image_1 %}
+        <img src="{{ image_1 | image_url: width: 800 }}" alt="Story Image 1" class="absolute h-[250px] sm:h-[350px] md:h-[400px] -translate-x-12 md:-translate-x-28 z-1 transition-transform duration-300 hover:scale-105" />
+      {% else %}
+        <img src="{{ 'Story.png' | file_img_url: 'master' }}" alt="Story Image 1" class="absolute h-[250px] sm:h-[350px] md:h-[400px] -translate-x-12 md:-translate-x-28 z-1 transition-transform duration-300 hover:scale-105" />
+      {% endif %}
+      
+      {% if section.settings.story_image_2 %}
+        <img src="{{ image_2 | image_url: width: 800 }}" alt="Story Image 2" class="absolute h-[250px] sm:h-[350px] md:h-[400px] translate-x-12 md:translate-x-28 rotate-30 z-3 transition-transform duration-300 hover:scale-105" />
+      {% else %}
+        <img src="{{ 'Story.png' | file_img_url: 'master' }}" alt="Story Image 2" class="absolute h-[250px] sm:h-[350px] md:h-[400px] translate-x-12 md:translate-x-28 rotate-30 z-3 transition-transform duration-300 hover:scale-105" />
+      {% endif %}
     </div>
   </div>
 </div>
