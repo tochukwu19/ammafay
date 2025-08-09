@@ -180,9 +180,157 @@
   }
 </style>
 
-<section class="coming-soon-section">
-  <div class="container w-[90%] md:w-[85] mx-auto px-4">
+{% schema %}
+{
+  "name": "Coming Soon Products",
+  "settings": [
+    {
+      "type": "text",
+      "id": "section_title",
+      "label": "Section Title",
+      "default": "Our Products"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "product",
+      "name": "Product",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "product_image",
+          "label": "Product Image"
+        },
+        {
+          "type": "text",
+          "id": "product_title",
+          "label": "Product Title",
+          "default": "Product Name"
+        },
+        {
+          "type": "text",
+          "id": "product_size",
+          "label": "Product Size",
+          "default": "100ml"
+        },
+        {
+          "type": "text",
+          "id": "badge_text",
+          "label": "Badge Text",
+          "default": "Coming Soon"
+        },
+        {
+          "type": "url",
+          "id": "pre_order_url",
+          "label": "Pre-order URL"
+        },
+        {
+          "type": "text",
+          "id": "button_text",
+          "label": "Button Text",
+          "default": "Pre-Order Now"
+        },
+        {
+          "type": "text",
+          "id": "discount_text",
+          "label": "Discount Text",
+          "default": "Get 30% Off"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 3,
+  "presets": [
+    {
+      "name": "Coming Soon Products"
+    }
+  ]
+}
+{% endschema %}
+
+<section id="our-products" class="coming-soon-section">
+  <div class="container w-[90%] md:w-[95%] mx-auto px-4">
     <h2 class="section-title kefir">{{ section.settings.section_title | default: 'Our Products' }}</h2>
+    
+    <div class="products-grid grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+      {% if section.blocks.size > 0 %}
+        {% for block in section.blocks limit: 3 %}
+          {% case block.type %}
+            {% when 'product' %}
+              <div class="product-card">
+                <div class="product-image-container">
+                  {% if block.settings.product_image %}
+                    <img src="{{ block.settings.product_image | image_url: width: 400, height: 400 }}" 
+                         alt="{{ block.settings.product_title | default: 'Coming Soon Product' }}" 
+                         class="product-image"
+                         loading="lazy">
+                  {% else %}
+                    <div class="placeholder-image">
+                      <svg class="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+                      </svg>
+                    </div>
+                  {% endif %}
+                  
+                  <div class="coming-soon-badge">
+                    {{ block.settings.badge_text | default: 'Coming Soon' }}
+                  </div>
+                </div>
+                
+                <div class="product-info">
+                  <h3 class="product-title">
+                    {{ block.settings.product_title | default: 'Product Name' }}
+                  </h3>
+                  
+                  {% if block.settings.product_size %}
+                    <p class="product-size">{{ block.settings.product_size }}</p>
+                  {% endif %}
+                  
+                  <div class="product-actions">
+                    <a href="{{ block.settings.pre_order_url | default: '#' }}" 
+                       class="pre-order-btn">
+                      {{ block.settings.button_text | default: 'Pre-Order Now' }}
+                    </a>
+                    
+                    {% if block.settings.discount_text %}
+                      <p class="discount-text">{{ block.settings.discount_text }}</p>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+          {% endcase %}
+        {% endfor %}
+      {% else %}
+        {% assign default_products = 'Infant & Toddler Hand Cleaner,Infant & Toddler Skin Repair,Toy & Surface Cleaner' | split: ',' %}
+        {% assign default_sizes = '100ml,100ml,100ml' | split: ',' %}
+        
+        {% for product_name in default_products %}
+          <div class="product-card">
+            <div class="product-image-container">
+              <div class="placeholder-image">
+                <svg class="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+                </svg>
+              </div>
+              <div class="coming-soon-badge">Coming Soon</div>
+            </div>
+            
+            <div class="product-info">
+              <h3 class="product-title">{{ product_name }}</h3>
+              <p class="product-size">{{ default_sizes[forloop.index0] }}</p>
+              
+              <div class="product-actions">
+                <a href="#" class="pre-order-btn">Pre-Order Now</a>
+                <p class="discount-text">Get 30% Off</p>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      {% endif %}
+    </div>
+
+    {% comment %}
+    CAROUSEL VERSION - COMMENTED OUT FOR LATER USE
     
     <div class="swiper-container-wrapper">
       <swiper-container class="products-swiper-2" init="false">
@@ -279,10 +427,13 @@
         </button>
       </div>
     </div>
+    
+    END CAROUSEL VERSION
+    {% endcomment %}
   </div>
 </section>
 
-<script>
+{% comment %} <script>
   document.addEventListener('DOMContentLoaded', function() {
     setTimeout(() => {
       const swiperContainer = document.querySelector('.products-swiper-2');
@@ -365,95 +516,5 @@
       }
     }, 100);
   });
-</script>
+</script> {% endcomment %}
 
-{% schema %}
-{
-  "name": "Coming Soon Products",
-  "tag": "section",
-  "settings": [
-    {
-      "type": "text",
-      "id": "section_title",
-      "label": "Section Title",
-      "default": "Our Products"
-    }
-  ],
-  "blocks": [
-    {
-      "type": "product",
-      "name": "Product",
-      "settings": [
-        {
-          "type": "image_picker",
-          "id": "product_image",
-          "label": "Product Image"
-        },
-        {
-          "type": "text",
-          "id": "product_title",
-          "label": "Product Title",
-          "default": "Product Name"
-        },
-        {
-          "type": "text",
-          "id": "product_size",
-          "label": "Product Size/Details",
-          "default": "100ml"
-        },
-        {
-          "type": "text",
-          "id": "badge_text",
-          "label": "Badge Text",
-          "default": "Coming Soon"
-        },
-        {
-          "type": "text",
-          "id": "button_text",
-          "label": "Button Text",
-          "default": "Pre-Order Now"
-        },
-        {
-          "type": "url",
-          "id": "pre_order_url",
-          "label": "Pre-Order URL"
-        },
-        {
-          "type": "text",
-          "id": "discount_text",
-          "label": "Discount Text",
-          "default": "Get 30% Off"
-        }
-      ]
-    }
-  ],
-  "presets": [
-    {
-      "name": "Coming Soon Products",
-      "blocks": [
-        {
-          "type": "product",
-          "settings": {
-            "product_title": "Infant & Toddler Hand Cleaner",
-            "product_size": "100ml"
-          }
-        },
-        {
-          "type": "product",
-          "settings": {
-            "product_title": "Infant & Toddler Skin Repair",
-            "product_size": "100ml"
-          }
-        },
-        {
-          "type": "product",
-          "settings": {
-            "product_title": "Toy & Surface Cleaner",
-            "product_size": "100ml"
-          }
-        }
-      ]
-    }
-  ]
-}
-{% endschema %}

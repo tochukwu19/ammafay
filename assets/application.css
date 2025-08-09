@@ -4,15 +4,27 @@ body {
     overflow-x: hidden;
 }
 
-html{
+html {
     overflow-x: hidden;
+    scroll-behavior: smooth;
+}
+
+#why-hclo,
+#our-products {
+    scroll-margin-top: 50px;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    html {
+        scroll-behavior: smooth;
+    }
 }
 
 @font-face {
-  font-family: 'Kefir';
-  src: url('https://cdn.shopify.com/s/files/1/0945/3669/6115/files/Kefir-Bold.woff2') format('woff2');
+    font-family: 'Kefir';
+    src: url('https://cdn.shopify.com/s/files/1/0945/3669/6115/files/Kefir-Bold.woff2') format('woff2');
 }
 
-.kefir{
+.kefir {
     font-family: 'Kefir', sans-serif;
 }
