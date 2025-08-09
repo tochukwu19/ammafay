@@ -47,7 +47,7 @@
         "feature_TEiV4r": {
           "type": "feature",
           "settings": {
-            "icon_image": "shopify://shop_images/Natural.png",
+            "icon_image": "shopify://shop_images/Group_1.png",
             "title": "100% natural",
             "description": ""
           }
@@ -55,7 +55,7 @@
         "feature_iwygNd": {
           "type": "feature",
           "settings": {
-            "icon_image": "shopify://shop_images/ZeroMonths.png",
+            "icon_image": "shopify://shop_images/Layer_1.png",
             "title": "0+ months",
             "description": ""
           }
@@ -63,7 +63,7 @@
         "feature_HtJnfd": {
           "type": "feature",
           "settings": {
-            "icon_image": "shopify://shop_images/NonToxic.png",
+            "icon_image": "shopify://shop_images/Layer_1_1.png",
             "title": "Non-toxic",
             "description": ""
           }
@@ -71,7 +71,7 @@
         "feature_NzmBDF": {
           "type": "feature",
           "settings": {
-            "icon_image": "shopify://shop_images/AdditiveFree.png",
+            "icon_image": "shopify://shop_images/Layer_1_2.png",
             "title": "Additive free",
             "description": ""
           }
@@ -79,7 +79,7 @@
         "feature_zwKAeB": {
           "type": "feature",
           "settings": {
-            "icon_image": "shopify://shop_images/AlcoholFree.png",
+            "icon_image": "shopify://shop_images/Group_2.png",
             "title": "alcohol free",
             "description": ""
           }
@@ -87,7 +87,7 @@
         "feature_n4eVy7": {
           "type": "feature",
           "settings": {
-            "icon_image": "shopify://shop_images/EarthFriendly.png",
+            "icon_image": "shopify://shop_images/Layer_1_3.png",
             "title": "earth friendly",
             "description": ""
           }
