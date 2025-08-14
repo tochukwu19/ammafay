@@ -189,57 +189,49 @@
       "id": "section_title",
       "label": "Section Title",
       "default": "Our Products"
-    }
-  ],
-  "blocks": [
+    },
     {
-      "type": "product",
-      "name": "Product",
-      "settings": [
-        {
-          "type": "image_picker",
-          "id": "product_image",
-          "label": "Product Image"
-        },
-        {
-          "type": "text",
-          "id": "product_title",
-          "label": "Product Title",
-          "default": "Product Name"
-        },
-        {
-          "type": "text",
-          "id": "product_size",
-          "label": "Product Size",
-          "default": "100ml"
-        },
-        {
-          "type": "text",
-          "id": "badge_text",
-          "label": "Badge Text",
-          "default": "Coming Soon"
-        },
-        {
-          "type": "url",
-          "id": "pre_order_url",
-          "label": "Pre-order URL"
-        },
-        {
-          "type": "text",
-          "id": "button_text",
-          "label": "Button Text",
-          "default": "Pre-Order Now"
-        },
-        {
-          "type": "text",
-          "id": "discount_text",
-          "label": "Discount Text",
-          "default": "Get 30% Off"
-        }
-      ]
+      "type": "collection",
+      "id": "product_collection",
+      "label": "Product Collection",
+      "info": "Select a collection containing your coming soon products"
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "min": 1,
+      "max": 12,
+      "step": 1,
+      "unit": "products",
+      "label": "Number of products to show",
+      "default": 3
+    },
+    {
+      "type": "text",
+      "id": "coming_soon_tag",
+      "label": "Coming Soon Tag",
+      "default": "coming-soon",
+      "info": "Products with this tag will be shown. Leave empty to show all products from the collection."
+    },
+    {
+      "type": "text",
+      "id": "badge_text",
+      "label": "Badge Text",
+      "default": "Coming Soon"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button Text",
+      "default": "Pre-Order Now"
+    },
+    {
+      "type": "text",
+      "id": "discount_text",
+      "label": "Discount Text",
+      "default": "Get 30% Off"
     }
   ],
-  "max_blocks": 3,
   "presets": [
     {
       "name": "Coming Soon Products"
@@ -253,52 +245,59 @@
     <h2 class="section-title kefir">{{ section.settings.section_title | default: 'Our Products' }}</h2>
     
     <div class="products-grid grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
-      {% if section.blocks.size > 0 %}
-        {% for block in section.blocks limit: 3 %}
-          {% case block.type %}
-            {% when 'product' %}
-              <div class="product-card">
-                <div class="product-image-container">
-                  {% if block.settings.product_image %}
-                    <img src="{{ block.settings.product_image | image_url: width: 400, height: 400 }}" 
-                         alt="{{ block.settings.product_title | default: 'Coming Soon Product' }}" 
-                         class="product-image"
-                         loading="lazy">
-                  {% else %}
-                    <div class="placeholder-image">
-                      <svg class="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
-                      </svg>
-                    </div>
-                  {% endif %}
-                  
-                  <div class="coming-soon-badge">
-                    {{ block.settings.badge_text | default: 'Coming Soon' }}
-                  </div>
+
+      {% assign products_source = collections.all.products %}
+      
+      {% if section.settings.coming_soon_tag != blank %}
+        {% assign filtered_products = products_source | where: 'tags', section.settings.coming_soon_tag %}
+      {% else %}
+        {% assign filtered_products = products_source %}
+      {% endif %} 
+      
+      {% assign products_to_display = filtered_products | limit: section.settings.products_to_show %}
+      
+      {% if products_to_display.size > 0 %}
+        {% for product in products_to_display %}
+          <div class="product-card">
+            <div class="product-image-container">
+              {% if product.featured_image %}
+                <img src="{{ product.featured_image | image_url: width: 400, height: 400 }}" 
+                     alt="{{ product.title }}" 
+                     class="product-image"
+                     loading="lazy">
+              {% else %}
+                <div class="placeholder-image">
+                  <svg class="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+                  </svg>
                 </div>
-                
-                <div class="product-info">
-                  <h3 class="product-title">
-                    {{ block.settings.product_title | default: 'Product Name' }}
-                  </h3>
-                  
-                  {% if block.settings.product_size %}
-                    <p class="product-size">{{ block.settings.product_size }}</p>
-                  {% endif %}
-                  
-                  <div class="product-actions">
-                    <a href="{{ block.settings.pre_order_url | default: '#' }}" 
-                       class="pre-order-btn">
-                      {{ block.settings.button_text | default: 'Pre-Order Now' }}
-                    </a>
-                    
-                    {% if block.settings.discount_text %}
-                      <p class="discount-text">{{ block.settings.discount_text }}</p>
-                    {% endif %}
-                  </div>
-                </div>
+              {% endif %}
+              
+              <div class="coming-soon-badge">
+                {{ section.settings.badge_text | default: 'Coming Soon' }}
               </div>
-          {% endcase %}
+            </div>
+            
+            <div class="product-info">
+              <h3 class="product-title">{{ product.title }}</h3>
+              
+              {% if product.variants.size > 0 and product.variants.first.title != 'Default Title' %}
+                <p class="product-size">{{ product.variants.first.title }}</p>
+              {% elsif product.metafields.custom.size %}
+                <p class="product-size">{{ product.metafields.custom.size }}</p>
+              {% endif %}
+              
+              <div class="product-actions">
+                <a href="{{ product.url }}" class="pre-order-btn">
+                  {{ section.settings.button_text | default: 'Pre-Order Now' }}
+                </a>
+                
+                {% if section.settings.discount_text != blank %}
+                  <p class="discount-text">{{ section.settings.discount_text }}</p>
+                {% endif %}
+              </div>
+            </div>
+          </div>
         {% endfor %}
       {% else %}
         {% assign default_products = 'Infant & Toddler Hand Cleaner,Infant & Toddler Skin Repair,Toy & Surface Cleaner' | split: ',' %}
@@ -312,7 +311,7 @@
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
                 </svg>
               </div>
-              <div class="coming-soon-badge">Coming Soon</div>
+              <div class="coming-soon-badge">{{ section.settings.badge_text | default: 'Coming Soon' }}</div>
             </div>
             
             <div class="product-info">
@@ -320,14 +319,18 @@
               <p class="product-size">{{ default_sizes[forloop.index0] }}</p>
               
               <div class="product-actions">
-                <a href="#" class="pre-order-btn">Pre-Order Now</a>
-                <p class="discount-text">Get 30% Off</p>
+                <a href="#" class="pre-order-btn">{{ section.settings.button_text | default: 'Pre-Order Now' }}</a>
+                {% if section.settings.discount_text != blank %}
+                  <p class="discount-text">{{ section.settings.discount_text }}</p>
+                {% endif %}
               </div>
             </div>
           </div>
         {% endfor %}
       {% endif %}
     </div>
+  </div>
+</section>
 
     {% comment %}
     CAROUSEL VERSION - COMMENTED OUT FOR LATER USE
