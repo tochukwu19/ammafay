@@ -102,12 +102,7 @@
     text-align: center;
     margin-bottom: 0.75rem;
   }
-  
-  .pre-order-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(132, 204, 22, 0.3);
-  }
-  
+
   .discount-text {
     text-align: right;
     color: #000;
@@ -183,55 +178,6 @@
 {% schema %}
 {
   "name": "Coming Soon Products",
-  "settings": [
-    {
-      "type": "text",
-      "id": "section_title",
-      "label": "Section Title",
-      "default": "Our Products"
-    },
-    {
-      "type": "collection",
-      "id": "product_collection",
-      "label": "Product Collection",
-      "info": "Select a collection containing your coming soon products"
-    },
-    {
-      "type": "range",
-      "id": "products_to_show",
-      "min": 1,
-      "max": 12,
-      "step": 1,
-      "unit": "products",
-      "label": "Number of products to show",
-      "default": 3
-    },
-    {
-      "type": "text",
-      "id": "coming_soon_tag",
-      "label": "Coming Soon Tag",
-      "default": "coming-soon",
-      "info": "Products with this tag will be shown. Leave empty to show all products from the collection."
-    },
-    {
-      "type": "text",
-      "id": "badge_text",
-      "label": "Badge Text",
-      "default": "Coming Soon"
-    },
-    {
-      "type": "text",
-      "id": "button_text",
-      "label": "Button Text",
-      "default": "Pre-Order Now"
-    },
-    {
-      "type": "text",
-      "id": "discount_text",
-      "label": "Discount Text",
-      "default": "Get 30% Off"
-    }
-  ],
   "presets": [
     {
       "name": "Coming Soon Products"
@@ -242,282 +188,54 @@
 
 <section id="our-products" class="coming-soon-section">
   <div class="container w-[90%] md:w-[95%] mx-auto px-4">
-    <h2 class="section-title kefir">{{ section.settings.section_title | default: 'Our Products' }}</h2>
+    <h2 class="section-title kefir">Our Products</h2>
     
     <div class="products-grid grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
-
-      {% assign products_source = collections.all.products %}
+      {% assign products_source = collections.frontpage.products %}
+      {% assign products_to_display = products_source | limit: 3 %}
       
-      {% if section.settings.coming_soon_tag != blank %}
-        {% assign filtered_products = products_source | where: 'tags', section.settings.coming_soon_tag %}
-      {% else %}
-        {% assign filtered_products = products_source %}
-      {% endif %} 
-      
-      {% assign products_to_display = filtered_products | limit: section.settings.products_to_show %}
-      
-      {% if products_to_display.size > 0 %}
-        {% for product in products_to_display %}
-          <div class="product-card">
-            <div class="product-image-container">
-              {% if product.featured_image %}
-                <img src="{{ product.featured_image | image_url: width: 400, height: 400 }}" 
-                     alt="{{ product.title }}" 
-                     class="product-image"
-                     loading="lazy">
-              {% else %}
-                <div class="placeholder-image">
-                  <svg class="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
-                  </svg>
-                </div>
-              {% endif %}
-              
-              <div class="coming-soon-badge">
-                {{ section.settings.badge_text | default: 'Coming Soon' }}
-              </div>
-            </div>
-            
-            <div class="product-info">
-              <h3 class="product-title">{{ product.title }}</h3>
-              
-              {% if product.variants.size > 0 and product.variants.first.title != 'Default Title' %}
-                <p class="product-size">{{ product.variants.first.title }}</p>
-              {% elsif product.metafields.custom.size %}
-                <p class="product-size">{{ product.metafields.custom.size }}</p>
-              {% endif %}
-              
-              <div class="product-actions">
-                <a href="{{ product.url }}" class="pre-order-btn">
-                  {{ section.settings.button_text | default: 'Pre-Order Now' }}
-                </a>
-                
-                {% if section.settings.discount_text != blank %}
-                  <p class="discount-text">{{ section.settings.discount_text }}</p>
-                {% endif %}
-              </div>
-            </div>
-          </div>
-        {% endfor %}
-      {% else %}
-        {% assign default_products = 'Infant & Toddler Hand Cleaner,Infant & Toddler Skin Repair,Toy & Surface Cleaner' | split: ',' %}
-        {% assign default_sizes = '100ml,100ml,100ml' | split: ',' %}
-        
-        {% for product_name in default_products %}
-          <div class="product-card">
-            <div class="product-image-container">
+      {% for product in products_to_display %}
+        <div class="product-card">
+          <div class="product-image-container">
+            {% if product.featured_image %}
+              <img src="{{ product.featured_image | image_url: width: 400, height: 400 }}" 
+                   alt="{{ product.title }}" 
+                   class="product-image"
+                   loading="lazy">
+            {% else %}
               <div class="placeholder-image">
                 <svg class="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
                 </svg>
               </div>
-              <div class="coming-soon-badge">{{ section.settings.badge_text | default: 'Coming Soon' }}</div>
-            </div>
+            {% endif %}
             
-            <div class="product-info">
-              <h3 class="product-title">{{ product_name }}</h3>
-              <p class="product-size">{{ default_sizes[forloop.index0] }}</p>
-              
-              <div class="product-actions">
-                <a href="#" class="pre-order-btn">{{ section.settings.button_text | default: 'Pre-Order Now' }}</a>
-                {% if section.settings.discount_text != blank %}
-                  <p class="discount-text">{{ section.settings.discount_text }}</p>
-                {% endif %}
-              </div>
+            <div class="coming-soon-badge">
+              Coming Soon
             </div>
           </div>
-        {% endfor %}
-      {% endif %}
+          
+          <div class="product-info">
+            <h3 class="product-title">
+              <a href="{{ product.url }}">{{ product.title }}</a>
+            </h3>
+            
+            {% if product.variants.size > 0 and product.variants.first.title != 'Default Title' %}
+              <p class="product-size">{{ product.variants.first.title }}</p>
+            {% elsif product.metafields.custom.size %}
+              <p class="product-size">{{ product.metafields.custom.size }}</p>
+            {% endif %}
+            
+            <div class="product-actions">
+              <a href="{{ product.url }}" class="pre-order-btn">
+                Pre-Order Now
+              </a>
+              
+              <p class="discount-text">Get 30% Off</p>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
     </div>
   </div>
 </section>
-
-    {% comment %}
-    CAROUSEL VERSION - COMMENTED OUT FOR LATER USE
-    
-    <div class="swiper-container-wrapper">
-      <swiper-container class="products-swiper-2" init="false">
-        {% if section.blocks.size > 0 %}
-          {% for block in section.blocks %}
-            {% case block.type %}
-              {% when 'product' %}
-                <swiper-slide>
-                  <div class="product-card">
-                    <div class="product-image-container">
-                      {% if block.settings.product_image %}
-                        <img src="{{ block.settings.product_image | image_url: width: 400, height: 400 }}" 
-                             alt="{{ block.settings.product_title | default: 'Coming Soon Product' }}" 
-                             class="product-image"
-                             loading="lazy">
-                      {% else %}
-                        <div class="placeholder-image">
-                          <svg class="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
-                          </svg>
-                        </div>
-                      {% endif %}
-                      
-                      <div class="coming-soon-badge">
-                        {{ block.settings.badge_text | default: 'Coming Soon' }}
-                      </div>
-                    </div>
-                    
-                    <div class="product-info">
-                      <h3 class="product-title">
-                        {{ block.settings.product_title | default: 'Product Name' }}
-                      </h3>
-                      
-                      {% if block.settings.product_size %}
-                        <p class="product-size">{{ block.settings.product_size }}</p>
-                      {% endif %}
-                      
-                      <div class="product-actions">
-                        <a href="{{ block.settings.pre_order_url | default: '#' }}" 
-                           class="pre-order-btn">
-                          {{ block.settings.button_text | default: 'Pre-Order Now' }}
-                        </a>
-                        
-                        {% if block.settings.discount_text %}
-                          <p class="discount-text">{{ block.settings.discount_text }}</p>
-                        {% endif %}
-                      </div>
-                    </div>
-                  </div>
-                </swiper-slide>
-            {% endcase %}
-          {% endfor %}
-        {% else %}
-          {% assign default_products = 'Infant & Toddler Hand Cleaner,Infant & Toddler Skin Repair,Toy & Surface Cleaner, Strong and Gold, Black Star' | split: ',' %}
-          {% assign default_sizes = '100ml,100ml,100ml,50ml,50ml' | split: ',' %}
-          
-          {% for product_name in default_products %}
-            <swiper-slide>
-              <div class="product-card">
-                <div class="product-image-container">
-                  <div class="placeholder-image">
-                    <svg class="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
-                    </svg>
-                  </div>
-                  <div class="coming-soon-badge">Coming Soon</div>
-                </div>
-                
-                <div class="product-info">
-                  <h3 class="product-title">{{ product_name }}</h3>
-                  <p class="product-size">{{ default_sizes[forloop.index0] }}</p>
-                  
-                  <div class="product-actions">
-                    <a href="#" class="pre-order-btn">Pre-Order Now</a>
-                    <p class="discount-text">Get 30% Off</p>
-                  </div>
-                </div>
-              </div>
-            </swiper-slide>
-          {% endfor %}
-        {% endif %}
-      </swiper-container>
-      
-      <div class="navigation-buttons">
-        <button class="nav-button prev" aria-label="Previous products">
-          <svg width="7" height="12" viewBox="0 0 7 12" fill="none">
-            <path d="M0.46957 6.53033C0.176677 6.23744 0.176677 5.76256 0.46957 5.46967L5.24254 0.696699C5.53543 0.403806 6.01031 0.403806 6.3032 0.696699C6.59609 0.989593 6.59609 1.46447 6.3032 1.75736L2.06056 6L6.3032 10.2426C6.59609 10.5355 6.59609 11.0104 6.3032 11.3033C6.01031 11.5962 5.53543 11.5962 5.24254 11.3033L0.46957 6.53033ZM1 6.75H0.9999V5.25H1V6.75Z" fill="#9CA3AF"/>
-          </svg>
-        </button>
-        <button class="nav-button next" aria-label="Next products">
-          <svg width="7" height="12" viewBox="0 0 7 12" fill="none">
-            <path d="M6.53043 6.53033C6.82332 6.23744 6.82332 5.76256 6.53043 5.46967L1.75746 0.696699C1.46457 0.403806 0.989692 0.403806 0.696799 0.696699C0.403906 0.989593 0.403906 1.46447 0.696799 1.75736L4.93944 6L0.696799 10.2426C0.403906 10.5355 0.403906 11.0104 0.696799 11.3033C0.989692 11.5962 1.46457 11.5962 1.75746 11.3033L6.53043 6.53033ZM6 6.75H6.0001V5.25H6V6.75Z" fill="#9CA3AF"/>
-          </svg>
-        </button>
-      </div>
-    </div>
-    
-    END CAROUSEL VERSION
-    {% endcomment %}
-  </div>
-</section>
-
-{% comment %} <script>
-  document.addEventListener('DOMContentLoaded', function() {
-    setTimeout(() => {
-      const swiperContainer = document.querySelector('.products-swiper-2');
-      const prevButton = document.querySelector('.nav-button.prev');
-      const nextButton = document.querySelector('.nav-button.next');
-      
-      if (!swiperContainer) return;
-      
-      const params = {
-        spaceBetween: 24,
-        loop: false,
-        grabCursor: true,
-        navigation: false, 
-        breakpoints: {
-          320: {
-            slidesPerView: 1,
-            spaceBetween: 16,
-          },
-          640: {
-            slidesPerView: 2,
-            spaceBetween: 20,
-          },
-          1024: {
-            slidesPerView: 3,
-            spaceBetween: 24,
-          },
-          1280: {
-            slidesPerView: 4,
-            spaceBetween: 24,
-          }
-        }
-      };
-      
-      Object.assign(swiperContainer, params);
-      swiperContainer.initialize();
-      
-      const checkSwiper = () => {
-        if (swiperContainer.swiper) {
-          setupNavigation();
-        } else {
-          setTimeout(checkSwiper, 50);
-        }
-      };
-      
-      checkSwiper();
-      
-      function setupNavigation() {
-        if (prevButton && nextButton) {
-          prevButton.addEventListener('click', (e) => {
-            e.preventDefault();
-            swiperContainer.swiper.slidePrev();
-            updateButtonStates();
-          });
-          
-          nextButton.addEventListener('click', (e) => {
-            e.preventDefault();
-            swiperContainer.swiper.slideNext();
-            updateButtonStates();
-          });
-          
-          function updateButtonStates() {
-            const swiper = swiperContainer.swiper;
-            
-            prevButton.classList.remove('disabled');
-            nextButton.classList.remove('disabled');
-            
-            if (swiper.isBeginning) {
-              prevButton.classList.add('disabled');
-            }
-            
-            if (swiper.isEnd) {
-              nextButton.classList.add('disabled');
-            }
-          }
-          
-          swiperContainer.addEventListener('slidechange', updateButtonStates);
-          
-          updateButtonStates();
-        }
-      }
-    }, 100);
-  });
-</script> {% endcomment %}
-

@@ -9,7 +9,38 @@
   "market": [],
   "order": [],
   "page": [],
-  "product": [],
+  "product": [
+    {
+      "key": "is_preorder",
+      "namespace": "custom",
+      "name": "is_preorder",
+      "description": "",
+      "type": {
+        "name": "boolean",
+        "category": "TRUE_FALSE"
+      }
+    },
+    {
+      "key": "preorder_price",
+      "namespace": "custom",
+      "name": "preorder_price",
+      "description": "",
+      "type": {
+        "name": "money",
+        "category": "MONEY"
+      }
+    },
+    {
+      "key": "expected_ship_date",
+      "namespace": "custom",
+      "name": "expected_ship_date",
+      "description": "",
+      "type": {
+        "name": "date",
+        "category": "DATE_TIME"
+      }
+    }
+  ],
   "variant": [],
   "shop": []
 }
