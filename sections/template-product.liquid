@@ -194,7 +194,6 @@
 </div>
 
 <script>
-  // Form submission
   document.addEventListener('DOMContentLoaded', function () {
     const form = document.getElementById('product-form');
     const submitButton = form.querySelector('button[type="submit"]');
@@ -202,7 +201,6 @@
     form.addEventListener('submit', function (e) {
       e.preventDefault();
       
-      // Disable button and show loading state
       submitButton.disabled = true;
       const originalText = submitButton.textContent;
       submitButton.textContent = 'Adding...';
@@ -226,7 +224,6 @@
         return response.json();
       })
       .then(() => {
-        // Trigger cart update
         window.dispatchEvent(new CustomEvent('added-to-cart'));
         submitButton.textContent = 'Added!';
         setTimeout(() => {
@@ -242,7 +239,6 @@
       });
     });
 
-    // Quantity controls
     const quantityInput = document.querySelector('.quantity-input');
     const decreaseBtn = document.querySelector('.quantity-button.decrease');
     const increaseBtn = document.querySelector('.quantity-button.increase');
@@ -257,7 +253,6 @@
       quantityInput.value = parseInt(quantityInput.value) + 1;
     });
 
-    // Collapsible sections
     document.querySelectorAll('.section-title').forEach(title => {
       title.addEventListener('click', function() {
         this.classList.toggle('active');
@@ -274,7 +269,6 @@
       });
     });
 
-    // Variant selection
     document.querySelectorAll('variant-selector select').forEach(select => {
       select.addEventListener('change', function() {
         const variantSelector = this.closest('variant-selector');
@@ -285,7 +279,6 @@
     });
   });
 
-  // Variant update function
   function updateVariant(variantSelector) {
     const options = Array.from(variantSelector.querySelectorAll('select'), select => select.value);
     const variantData = JSON.parse(variantSelector.querySelector('[type="application/json"]').textContent);
@@ -295,15 +288,12 @@
     });
 
     if (currentVariant) {
-      // Update form
       document.querySelector("#product-form input[name='id']").value = currentVariant.id;
       
-      // Update URL
       const url = new URL(window.location);
       url.searchParams.set('variant', currentVariant.id);
       window.history.replaceState({}, '', url.toString());
       
-      // Update button state
       const submitButton = document.querySelector('button[type="submit"]');
       if (!currentVariant.available && !{{ is_preorder | default: false }}) {
         submitButton.disabled = true;
@@ -315,7 +305,6 @@
     }
   }
 
-  // Custom element for variant selector
   class VariantSelector extends HTMLElement {
     constructor() {
       super();

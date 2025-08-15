@@ -1,0 +1,89 @@
+<style>
+  .reviews {
+    background-image: url("{{ 'wave_bg.png' | file_img_url: "master" }}");
+    background-size: contain;
+    background-position: top;
+    background-repeat: no-repeat;
+    color: #1F2937;
+  }
+
+  .jdgm-carousel-title {
+    font-size: 40px;
+    font-family: 'Helvetica-now'
+    , sans-serif;
+    font-weight: 700;
+    color: #1F2937;
+
+    @media only screen and (max-width: 600px) {
+      font-size: 25px;
+    }
+
+  }
+
+  .jdgm-star {
+    color: #FBBF24 !important;
+  }
+
+  .jdgm-all-reviews-rating {
+    margin: 15px 0;
+    color: #1F2937;
+  }
+
+  .jdgm-carousel-item {
+    background-color: #D2E9FF;
+    border: 1px solid #000;
+    padding: 20px !important;
+    border-radius: 15px;
+    margin-right: 13px;
+    color: #1F2937;
+
+    @media only screen and (max-width: 600px) {
+      margin-right: 0 !important;
+    }
+  }
+
+  .jdgm-carousel-item:nth-child(1n) {
+    background-color: #D2E9FF;
+  }
+
+  .jdgm-carousel-item:nth-child(2n) {
+    background-color: #FFEBD2;
+  }
+
+  .jdgm-carousel-item:nth-child(3n) {
+    background-color: #FFD2D2;
+  }
+
+  .jdgm-carousel-item:nth-child(4n) {
+    background-color: #FFEBDB;
+  }
+</style>
+
+<div class="reviews w-full pt-[150px] h-auto mb-16">
+  <div class="md:mt-52">
+    <!-- Start of Judge.me code -->
+    <div class='jdgm-carousel-wrapper'>
+      {% assign jm_metafields = shop.metafields.judgeme %}
+      <div class='jdgm-carousel-title-and-link'>
+        <h2 class='jdgm-carousel-title'>Let customers speak for us</h2>
+        <span class='jdgm-all-reviews-rating-wrapper' href='javascript:void(0)'>
+          <span
+            style='display:block'
+            data-score='{{ jm_metafields.all_reviews_rating }}'
+            class='jdgm-all-reviews-rating'
+            aria-label='{{ jm_metafields.all_reviews_rating }} stars'
+            tabindex='0'
+            role='img'></span>
+          <span
+            style='display: block'
+            class='jdgm-carousel-number-of-reviews font-bold helvetica'
+            data-number-of-reviews='{{ jm_metafields.all_reviews_count }}'>
+            {{ shop.metafields.judgeme.all_reviews_count }} reviews
+          </span>
+        </span>
+      </div>
+      {{ jm_metafields.featured_carousel }}
+    </div>
+  <!-- End of Judge.me code -->
+  </div>
+</div>
