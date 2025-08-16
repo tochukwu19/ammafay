@@ -11,7 +11,7 @@
       </div>
     {% else %}
       <div class="cart-header mb-8">
-        <h1 class="text-2xl font-[500] uppercase">Cart ({{ cart.item_count }})</h1>
+        <h1 class="text-lg md:text-xl font-[500] uppercase">Cart ({{ cart.item_count }})</h1>
       </div>
 
       <form action="{{ routes.cart_url }}" method="post" novalidate class="cart-form">
@@ -22,7 +22,7 @@
               
               <div class="w-full md:w-32 h-32 flex-shrink-0">
                 {% if item.image %}
-                  <img src="{{ item.image | image_url: width: 200 }}" 
+                  <img src="{{ item.image | image_url: width: 400 }}" 
                        alt="{{ item.title }}" 
                        class="w-full h-full object-cover">
                 {% else %}
@@ -35,7 +35,7 @@
               <div class="flex-grow">
                 <div class="flex justify-between items-start mb-2">
                   <div>
-                    <h3 class="font-[500] text-[18px] uppercase">
+                    <h3 class="font-[500] text-base md:text-[18px] uppercase">
                       <a href="{{ item.url }}" class="hover:underline">{{ item.product.title }}</a>
                     </h3>
                     {% if item.variant.title != 'Default Title' %}

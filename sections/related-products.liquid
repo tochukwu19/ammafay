@@ -1,129 +1,348 @@
 {% style %}
   .product-recommendations {
     text-align: left;
-
-    h2 {
-    ;
-    /* margin: auto; */
   }
 
-  .grid {
+  .product-recommendations .grid {
+    display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 20px;
+  }
 
-    @media only screen and (max-width: 400px) {
+  @media only screen and (max-width: 1024px) {
+    .product-recommendations .grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  @media only screen and (max-width: 768px) {
+    .product-recommendations .grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media only screen and (max-width: 400px) {
+    .product-recommendations .grid {
       grid-template-columns: 1fr;
     }
   }
 
-  .card {
+  .product-card .card {
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
     width: 100%;
   }
 
-  .overlay {
+  .product-card .overlay {
     opacity: 0;
     transition: all ease-in-out 0.3s;
-    z-index: -1;
   }
 
-  .card-container:hover .overlay {
+  .product-card .card-container:hover .overlay {
     opacity: 1;
-    z-index: 1;
   }
-}
 
-.product-card {
-  .card {
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    width: 100%;
+  .product-card .add_to_cart {
+    transition: all 0.3s ease;
   }
-}
+
+  .product-card .add_to_cart:disabled {
+    background-color: #e5e7eb;
+    color: #9ca3af;
+    cursor: not-allowed;
+  }
 {% endstyle %}
 
 {% if section.settings.show_recommendations %}
-  <div class="w-[95%] mx-auto product-recommendations mt-16 mb-8" data-url="{{ routes.product_recommendations_url }}?section_id={{ section.id }}&product_id={{ product.id }}&limit=4&intent=related">
+  <div
+    class="w-[90%] mx-auto product-recommendations mt-16 mb-8"
+    data-url="{{ routes.product_recommendations_url }}?section_id={{ section.id }}&product_id={{ product.id }}&limit=4&intent=related"
+    data-product-id="{{ product.id }}">
+
     {%- if recommendations.performed? and recommendations.products_count > 0 -%}
       <div class="w-full my-4 flex flex-col justify-start">
-        <p class="w-[90%] md:w-[20%] uppercase font-[500] text-sm md:text-base">
-          See Related items
+        <p class="kefir mx-0 md:mx-auto w-[90%] md:w-[20%] uppercase font-semibold text-lg md:text-2xl mb-8">
+          Related Products
         </p>
-        <h2 class="w-[90%] calvino font-[500] text-[50px] md:text-[100px]">
-          You may also like
-        </h2>
       </div>
 
-      <div class="w-full mx-auto grid gap-8">
+      <div class="w-full mx-auto grid">
         {% for product in recommendations.products %}
           {% render "product-card"
             , product: product %}
         {% else %}
-          <p>No products found.</p>
+          <p class="text-center text-gray-500 py-8">No related products found.</p>
+        {% endfor %}
+      </div>
+
+      <div id="quick-view-section" class="quick-view-section hidden w-full bg-white border border-gray-200 mt-8 p-6">
+        <div class="flex justify-between items-start mb-4">
+          <h3 class="text-xl font-medium quick-view-title"></h3>
+          <button id="close-quick-view" class="text-gray-400 hover:text-gray-600 text-2xl">&times;</button>
+        </div>
+
+        <div class="flex flex-col md:flex-row gap-8">
+          <div class="w-full md:w-1/3">
+            <div class="quick-view-image w-full h-80 bg-gray-100" style="background-size: cover; background-position: center;"></div>
+          </div>
+
+          <div class="w-full md:w-2/3">
+            <div class="quick-view-price text-lg font-medium mb-4"></div>
+            <div class="quick-view-description text-gray-600 mb-6"></div>
+
+            <div class="flex items-center gap-4">
+              <div class="quantity-selector flex items-center gap-2 border border-black px-4 py-3">
+                <button type="button" class="quantity-decrease">-</button>
+                <input
+                  type="number"
+                  min="1"
+                  value="1"
+                  class="quantity-input text-center text-base outline-none w-[50px] [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none">
+                <button type="button" class="quantity-increase">+</button>
+              </div>
+
+              <button id="quick-add-to-cart" class="flex-1 bg-black text-white py-3 px-6 hover:bg-gray-800 transition-colors">
+                Add to Cart
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    {%- else -%}
+      <div class="w-full my-4 flex flex-col justify-start">
+        <p class="kefir mx-0 md:mx-auto w-[90%] md:w-[20%] uppercase font-semibold text-lg md:text-2xl mb-8">
+          Related Products
+        </p>
+      </div>
+      <div class="grid">
+        {% for i in (1..4) %}
+          <div class="animate-pulse">
+            <div class="aspect-square bg-gray-200 mb-4"></div>
+            <div class="h-4 bg-gray-200 mb-2"></div>
+            <div class="h-3 bg-gray-200 w-1/2"></div>
+          </div>
         {% endfor %}
       </div>
     {%- endif -%}
   </div>
 {% endif %}
 
-
 <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const productRecommendationsSection = document.querySelector('.product-recommendations');
-      if (!productRecommendationsSection) return;
+  document.addEventListener('DOMContentLoaded', () => {
+  const productRecommendationsSection = document.querySelector('.product-recommendations');
+  if (!productRecommendationsSection) return;
+  
+  let isObserving = false;
+  
+  const observer = new IntersectionObserver((entries, observer) => {
+    if (!entries[0].isIntersecting || isObserving) return;
     
-      const observer = new IntersectionObserver((entries, observer) => {
-        if (!entries[0].isIntersecting) return;
-        observer.unobserve(entries[0].target);
-    
-        const url = entries[0].target.dataset.url;
-    
-        fetch(url)
-          .then(response => response.text())
-          .then(text => {
-            const html = document.createElement('div');
-            html.innerHTML = text;
-            const recommendations = html.querySelector('.product-recommendations');
-    
-            if (recommendations && recommendations.innerHTML.trim().length) {
-              entries[0].target.innerHTML = recommendations.innerHTML;
-              attachEventListeners(); // Attach event listeners after content is loaded
-            }
+    isObserving = true;
+    observer.unobserve(entries[0].target);
+  
+    const url = entries[0].target.dataset.url;
+  
+    fetch(url)
+      .then(response => response.text())
+      .then(text => {
+        const html = document.createElement('div');
+        html.innerHTML = text;
+        const recommendations = html.querySelector('.product-recommendations');
+  
+        if (recommendations && recommendations.innerHTML.trim().length) {
+          entries[0].target.innerHTML = recommendations.innerHTML;
+          attachEventListeners();
+        } else {
+          entries[0].target.innerHTML = `
+            <div class="w-full my-4 flex flex-col justify-start">
+              <p class="kefir mx-0 md:mx-auto w-[90%] md:w-[20%] uppercase font-semibold text-lg md:text-2xl mb-8">
+              Related Products
+            </p>
+            </div>
+            <p class="text-center text-gray-500 py-8">No related products found.</p>
+          `;
+        }
+        isObserving = false;
+      })
+      .catch(e => {
+        console.error('Error fetching recommendations:', e);
+        entries[0].target.innerHTML = `
+          <div class="w-full my-4 flex flex-col justify-start">
+            <p class="kefir mx-0 md:mx-auto w-[90%] md:w-[20%] uppercase font-semibold text-lg md:text-2xl mb-8">
+              Related Products
+            </p>
+          </div>
+          <p class="text-center text-gray-500 py-8">No related products found.</p>
+        `;
+        isObserving = false;
+      });
+  }, { rootMargin: '0px 0px 200px 0px' });
+  
+  observer.observe(productRecommendationsSection);
+  attachEventListeners();
+  });
+  
+  const attachEventListeners = () => {
+    document.querySelectorAll('.add_to_cart').forEach(button => {
+      if (button.hasAttribute('data-listener-attached')) return;
+      button.setAttribute('data-listener-attached', 'true');
+      
+      button.addEventListener('click', event => {
+        event.preventDefault();
+        
+        button.disabled = true;
+        const originalText = button.textContent;
+        button.textContent = 'Adding...';
+        
+        const variantId = button.getAttribute('data-id');
+        
+        fetch('/cart/add.js', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            items: [{
+              id: variantId,
+              quantity: 1
+            }]
           })
-          .catch(e => {
-            console.error('Error fetching recommendations:', e);
-          });
-      }, { rootMargin: '0px 0px 200px 0px' });
-    
-      observer.observe(productRecommendationsSection);
-      attachEventListeners(); // Attach event listeners on initial load
-    });
-    
-    const attachEventListeners = () => {
-      document.querySelectorAll('.add_to_cart').forEach(item => {
-        item.addEventListener('click', event => {
-          event.preventDefault(); // Prevent default form submission
-          const id = item.getAttribute('data-id');
-          fetch(`/cart/add.js?id=${id}&quantity=1`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json'
-            }
-          })
-          .then(response => response.json())
-          .then(data => {
-            console.log(data);
+        })
+        .then(response => {
+          if (!response.ok) throw new Error('Network response was not ok');
+          return response.json();
+        })
+        .then(data => {
+          button.textContent = 'Added!';
+          button.style.backgroundColor = '#10b981';
+          button.style.color = 'white';
+          
+          setTimeout(() => {
             window.location.href = '/cart';
-          })
-          .catch((error) => {
-            console.error('Error:', error);
-          });
+          }, 500);
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          button.disabled = false;
+          button.textContent = 'Error';
+          button.style.backgroundColor = '#ef4444';
+          setTimeout(() => {
+            button.textContent = originalText;
+            button.style.backgroundColor = '';
+            button.style.color = '';
+          }, 2000);
         });
       });
-    };
+    });
+    
+    document.querySelectorAll('.quick-view-btn').forEach(btn => {
+      if (btn.hasAttribute('data-listener-attached')) return;
+      btn.setAttribute('data-listener-attached', 'true');
+      
+      btn.addEventListener('click', event => {
+        event.preventDefault();
+        event.stopPropagation();
+        
+        const productCard = btn.closest('.product-card');
+        const productTitle = productCard.querySelector('a').textContent.trim();
+        const productImage = productCard.querySelector('.card').style.backgroundImage;
+        const productPrice = productCard.querySelector('p:last-child').textContent.trim();
+        const productId = productCard.querySelector('.add_to_cart').getAttribute('data-id');
+        const productDescription = productCard.querySelector('.product-description').textContent.trim();
+
+        const quickViewSection = document.getElementById('quick-view-section');
+        const quickViewTitle = quickViewSection.querySelector('.quick-view-title');
+        const quickViewImage = quickViewSection.querySelector('.quick-view-image');
+        const quickViewPrice = quickViewSection.querySelector('.quick-view-price');
+        const quickAddButton = document.getElementById('quick-add-to-cart');
+        const quickViewDescription = document.querySelector('.quick-view-description');
+        
+        quickViewTitle.textContent = productTitle;
+        quickViewImage.style.backgroundImage = productImage;
+        quickViewPrice.textContent = productPrice;
+        quickAddButton.setAttribute('data-id', productId);
+        quickViewDescription.textContent = productDescription
+        
+        quickViewSection.classList.remove('hidden');
+        quickViewSection.scrollIntoView({ behavior: 'smooth' });
+      });
+    });
+    
+    const closeQuickView = document.getElementById('close-quick-view');
+    if (closeQuickView && !closeQuickView.hasAttribute('data-listener-attached')) {
+      closeQuickView.setAttribute('data-listener-attached', 'true');
+      closeQuickView.addEventListener('click', () => {
+        document.getElementById('quick-view-section').classList.add('hidden');
+      });
+    }
+    
+    const quickViewSection = document.getElementById('quick-view-section');
+    const quantityDecrease = quickViewSection?.querySelector('.quantity-decrease');
+    const quantityIncrease = quickViewSection?.querySelector('.quantity-increase');
+    const quantityInput = quickViewSection?.querySelector('.quantity-input');
+      
+    if (quantityDecrease && !quantityDecrease.hasAttribute('data-listener-attached')) {
+    quantityDecrease.setAttribute('data-listener-attached', 'true');
+    quantityDecrease.addEventListener('click', () => {
+      if (quantityInput.value > 1) {
+        quantityInput.value = parseInt(quantityInput.value) - 1;
+        quantityInput.dispatchEvent(new Event('input'));
+      }
+    });
+    }
+    
+    if (quantityIncrease && !quantityIncrease.hasAttribute('data-listener-attached')) {
+    quantityIncrease.setAttribute('data-listener-attached', 'true');
+    quantityIncrease.addEventListener('click', () => {
+      quantityInput.value = parseInt(quantityInput.value) + 1;
+      quantityInput.dispatchEvent(new Event('input'));
+    });
+    }
+    
+    const quickAddButton = document.getElementById('quick-add-to-cart');
+    if (quickAddButton && !quickAddButton.hasAttribute('data-listener-attached')) {
+      quickAddButton.setAttribute('data-listener-attached', 'true');
+      quickAddButton.addEventListener('click', event => {
+        event.preventDefault();
+        
+        const variantId = quickAddButton.getAttribute('data-id');
+        const quantity = quantityInput.value;
+        const originalText = quickAddButton.textContent;
+        
+        quickAddButton.disabled = true;
+        quickAddButton.textContent = 'Adding...';
+        
+        fetch('/cart/add.js', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            items: [{
+              id: variantId,
+              quantity: parseInt(quantity)
+            }]
+          })
+        })
+        .then(response => {
+          if (!response.ok) throw new Error('Network response was not ok');
+          return response.json();
+        })
+        .then(data => {
+          quickAddButton.textContent = 'Added!';
+          setTimeout(() => {
+            window.location.href = '/cart';
+          }, 500);
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          quickAddButton.disabled = false;
+          quickAddButton.textContent = originalText;
+        });
+      });
+    }
+  };
 </script>
 
 {% schema %}
