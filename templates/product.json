@@ -14,19 +14,36 @@
       "settings": {
         "details_title": "Details",
         "details_content": "<p>Provide detailed information about the product here.</p>",
-        "advice_title": "Advice & Care",
-        "advice_content": "<p>Provide advice and care instructions for the product here.</p>",
-        "warranty_title": "Warranty",
-        "warranty_content": "<p>Provide warranty information for the product here.</p>"
+        "shipping_title": "Shipping & Returns",
+        "shipping_content": ""
       }
     },
     "related-products": {
       "type": "related-products",
+      "settings": {
+        "show_recommendations": true
+      }
+    },
+    "17553333147fea000c": {
+      "type": "apps",
+      "blocks": {
+        "judge_me_reviews_review_widget_xDNkQx": {
+          "type": "shopify://apps/judge-me-reviews/blocks/review_widget/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
+          "settings": {
+            "review_data": "sample_data",
+            "max_width": 1200
+          }
+        }
+      },
+      "block_order": [
+        "judge_me_reviews_review_widget_xDNkQx"
+      ],
       "settings": {}
     }
   },
   "order": [
     "product",
-    "related-products"
+    "related-products",
+    "17553333147fea000c"
   ]
 }
