@@ -1,12 +1,3 @@
-/*
- * ------------------------------------------------------------
- * IMPORTANT: The contents of this file are auto-generated.
- *
- * This file may be updated by the Shopify admin theme editor
- * or related systems. Please exercise caution as any changes
- * made to this file may be overwritten.
- * ------------------------------------------------------------
- */
 {
   "sections": {
     "home": {
@@ -113,49 +104,6 @@
     },
     "categories": {
       "type": "template-categories",
-      "blocks": {
-        "product_GGEAkc": {
-          "type": "product",
-          "settings": {
-            "product_image": "shopify://shop_images/3ddc67e7b97ddcb3e00f0a9f29f992fd03f12654_2.png",
-            "product_title": "Infant & Toddler Hand Cleaner",
-            "product_size": "100ml",
-            "badge_text": "Coming Soon",
-            "pre_order_url": "",
-            "button_text": "Pre-Order Now",
-            "discount_text": "Get 30% Off"
-          }
-        },
-        "product_6qhdMm": {
-          "type": "product",
-          "settings": {
-            "product_image": "shopify://shop_images/d4d9ac7093878850dee065945825e2bc5356524e.png",
-            "product_title": "Infant & Toddler Skin Repair",
-            "product_size": "100ml",
-            "badge_text": "Coming Soon",
-            "pre_order_url": "",
-            "button_text": "Pre-Order Now",
-            "discount_text": "Get 30% Off"
-          }
-        },
-        "product_Q3tHkx": {
-          "type": "product",
-          "settings": {
-            "product_image": "shopify://shop_images/80ee45a73edda9d7bfde1e98fcaccca3a0f7067e.png",
-            "product_title": "Toy & Surface Cleaner",
-            "product_size": "100ml",
-            "badge_text": "Coming Soon",
-            "pre_order_url": "",
-            "button_text": "Pre-Order Now",
-            "discount_text": "Get 30% Off"
-          }
-        }
-      },
-      "block_order": [
-        "product_GGEAkc",
-        "product_6qhdMm",
-        "product_Q3tHkx"
-      ],
       "settings": {
         "section_title": "Our Products"
       }
