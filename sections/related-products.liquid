@@ -54,7 +54,7 @@
   }
 
   .jdgm-widget .jdgm-rev-widg {
-    padding: 16px !important;
+    padding: 16px 48px !important;
   }
 
   .jdgm-widget .jdgm-rev-widg__title {
@@ -63,9 +63,17 @@
     font-weight: 600;
   }
 
+  .jdgm-write-rev-link{
+    border-radius: 40px !important;
+  }
+
   @media only screen and (max-width: 600px) {
     .jdgm-widget .jdgm-rev-widg__title {
       font-size: 18px;
+    }
+
+    .jdgm-widget .jdgm-rev-widg {
+      padding: 16px !important;
     }
   }
 {% endstyle %}
@@ -118,7 +126,7 @@
                 <button type="button" class="quantity-increase">+</button>
               </div>
 
-              <button id="quick-add-to-cart" class="flex-1 bg-black text-white py-3 px-6 hover:bg-gray-800 transition-colors">
+              <button id="quick-add-to-cart" class="rounded-full flex-1 bg-black text-white py-3 px-6 hover:bg-gray-800 transition-colors">
                 Add to Cart
               </button>
             </div>

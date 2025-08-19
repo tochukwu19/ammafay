@@ -3,6 +3,10 @@
 {% assign preorder_price = product.metafields.custom.preorder_price %}
 {% assign preorder_date = product.metafields.custom.expected_ship_date %}
 
+{% assign ingredients_content = product.metafields.custom.functional_ingredients.value | default: section.settings.ingredients_content %}
+{% assign usage_content = product.metafields.custom.how_to_use.value | default: section.settings.usage_content %}
+
+
 <style>
   .product-image {
     background-position: center;
@@ -47,21 +51,55 @@
     font-weight: 500;
     text-transform: uppercase;
   }
+
+  .details-content ol {
+    padding-left: 1.5rem;
+    margin: 1rem 0;
+    list-style-type: decimal;
+    list-style-position: outside;
+  }
+
+  .details-content ol li {
+    margin-bottom: 0.75rem;
+    line-height: 1.5;
+    display: list-item;
+  }
+
+  .details-content ol li:last-child {
+    margin-bottom: 0;
+  }
+
+  .details-content ol li::marker {
+    color: inherit;
+  }
+
 </style>
 
 <div class="my-8">
   <div class="product w-full">
     <div class="product--information w-full">
-      {% form 'product', product, id: 'product-form', novalidate: 'novalidate' %}
-        <input type="hidden" name="id" value="{{ selected_variant.id }}">
-        
+      {% form 'product'
+        , product
+        , id: 'product-form'
+        , novalidate: 'novalidate' %}
+        <input
+          type="hidden"
+          name="id"
+          value="{{ selected_variant.id }}">
+
         {% if is_preorder %}
-          <input type="hidden" name="properties[_preorder]" value="true">
-          <input type="hidden" name="properties[Expected Ship Date]" value="{{ preorder_date }}">
+          <input
+            type="hidden"
+            name="properties[_preorder]"
+            value="true">
+          <input
+            type="hidden"
+            name="properties[Expected Ship Date]"
+            value="{{ preorder_date }}">
         {% endif %}
 
         <div class="mx-auto flex flex-col md:flex-row justify-start gap-16 items-center">
-          
+
           <div class="w-full block md:hidden">
             <div class="space-y-4">
               {% for media in product.media limit: 1 %}
@@ -79,7 +117,7 @@
           </div>
 
           <div class="w-full px-8 md:px-0 md:w-[40%] mb-8 flex flex-col justify-center">
-            
+
             <div class="flex items-center gap-3 mb-2">
               <h1 class="text-[18px] font-[500] uppercase">{{ product.title }}</h1>
               {% if is_preorder %}
@@ -88,7 +126,7 @@
             </div>
 
             <div class="mb-4">
-                <h2 class="text-base font-[500] text-[#6B7280] uppercase">{{ product.price | money_with_currency }}</h2>
+              <h2 class="text-base font-[500] text-[#6B7280] uppercase">{{ product.price | money_with_currency }}</h2>
             </div>
 
             <div class='jdgm-widget jdgm-preview-badge mb-2 text-sm' data-id='{{ product.id }}'>
@@ -100,48 +138,59 @@
             {% if is_preorder and preorder_date != blank %}
               <div class="mb-4 p-3 bg-blue-50 border border-blue-200 rounded">
                 <p class="text-sm text-blue-800">
-                  <strong>Expected to ship:</strong> {{ preorder_date | date: '%B %d, %Y' }}
+                  <strong>Expected to ship:</strong>
+                  {{ preorder_date | date: '%B %d, %Y' }}
                 </p>
               </div>
             {% endif %}
 
             {% unless product.has_only_default_variant %}
-              <variant-selector data-url="{{ product.url }}" data-section="{{ section.id }}">
-                {% for option in product.options_with_values %}
-                  <div class="mb-4">
-                    <label class="text-sm font-[500] uppercase block mb-2" for="Option-{{ section.id }}-{{ forloop.index0 }}">
-                      {{ option.name }}
-                    </label>
-                    
-                    <select 
-                      class="w-full p-3 border border-gray-300 rounded text-sm"
-                      name="options[{{ option.name | escape }}]"
-                      id="Option-{{ section.id }}-{{ forloop.index0 }}">
-                      {% for value in option.values %}
-                        <option 
-                          value="{{ value | escape }}"
-                          {% if option.selected_value == value %}selected{% endif %}>
-                          {{ value }}
-                        </option>
-                      {% endfor %}
-                    </select>
-                  </div>
-                {% endfor %}
-                
-                <script type="application/json">
-                  {{ product.variants | json }}
-                </script>
-              </variant-selector>
+              {% for option in product.options_with_values %}
+                <div class="mb-2 text-sm">
+                  <span class="font-[500]">{{ option.name }}</span>
+                  <span class="text-[#6B7280] font-[600]">{{ option.selected_value }}</span>
+                </div>
+              {% endfor %}
             {% endunless %}
+
+            {% comment %} {% unless product.has_only_default_variant %}
+                                          <variant-selector data-url="{{ product.url }}" data-section="{{ section.id }}">
+                                            {% for option in product.options_with_values %}
+                                              <div class="mb-4">
+                                                <label class="text-sm font-[500] uppercase block mb-2" for="Option-{{ section.id }}-{{ forloop.index0 }}">
+                                                  {{ option.name }}
+                                                </label>
+
+                                                <select
+                                                  class="w-full p-3 border border-gray-300 rounded text-sm"
+                                                  name="options[{{ option.name | escape }}]"
+                                                  id="Option-{{ section.id }}-{{ forloop.index0 }}">
+                                                  {% for value in option.values %}
+                                                    <option
+                                                      value="{{ value | escape }}"
+                                                      {% if option.selected_value == value %}
+                                                      selected{% endif %}>
+                                                      {{ value }}
+                                                    </option>
+                                                  {% endfor %}
+                                                </select>
+                                              </div>
+                                            {% endfor %}
+
+                                            <script type="application/json">
+                                              {{ product.variants | json }}
+                                            </script>
+                                          </variant-selector>
+                                    {% endunless %} {% endcomment %}
 
             <div class="mt-3 mb-6 flex items-center gap-2">
               <div class="quantity-selector w-[120px] flex items-center gap-2 border border-black px-4 py-3">
                 <button type="button" class="quantity-button decrease">-</button>
-                <input 
-                  type="number" 
-                  name="quantity" 
-                  value="1" 
-                  min="1" 
+                <input
+                  type="number"
+                  name="quantity"
+                  value="1"
+                  min="1"
                   class="quantity-input text-center text-base outline-none w-[50px] [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none">
                 <button type="button" class="quantity-button increase">+</button>
               </div>
@@ -149,9 +198,10 @@
               <button
                 type="submit"
                 name="add"
-                class="flex items-center justify-center gap-2 w-full px-6 py-3 bg-black text-white hover:bg-gray-700 rounded-sm uppercase transition-colors"
-                {% if selected_variant.available == false and is_preorder != true %}disabled{% endif %}>
-                
+                class="flex items-center justify-center gap-2 w-full px-6 py-3 bg-black text-white hover:bg-gray-700 rounded-full uppercase transition-colors"
+                {% if selected_variant.available == false and is_preorder != true %}
+                disabled{% endif %}>
+
                 {% if is_preorder %}
                   Pre-order Now
                 {% elsif selected_variant.available == false %}
@@ -162,26 +212,42 @@
               </button>
             </div>
 
-            {% if section.settings.details_content != blank %}
-              <div class="details-section border-t pt-4">
-                <div class="section-title flex justify-between items-center noselect py-2">
-                  <h3 class="text-sm font-[500] uppercase">{{ section.settings.details_title | default: 'Details' }}</h3>
-                  <div class="transform transition-transform">{% render 'icon-down' %}</div>
+            <p class="mb-6">Free standard shipping & returns on all orders $60+</p>
+
+            {% if ingredients_content != blank %}
+              <div class="ingredients-section border-t pt-4">
+                <div class="section-title flex justify-between items-center noselect py-2 cursor-pointer" data-toggle="ingredients">
+                  <h3 class="text-sm font-[500] uppercase">{{ section.settings.ingredients_title | default: 'Functional Ingredients' }}</h3>
+                  <div class="transform transition-transform duration-200" data-icon="ingredients">
+                    {% render 'icon-down' %}
+                  </div>
                 </div>
-                <div class="details-content">
-                  {{ section.settings.details_content }}
+                <div
+                  class="details-content overflow-hidden transition-all duration-300"
+                  data-content="ingredients"
+                  style="max-height: 0;">
+                  <div class="pb-4">
+                    {{ ingredients_content }}
+                  </div>
                 </div>
               </div>
             {% endif %}
 
-            {% if section.settings.shipping_content != blank %}
-              <div class="shipping-section border-t pt-4">
-                <div class="section-title flex justify-between items-center noselect py-2">
-                  <h3 class="text-sm font-[500] uppercase">{{ section.settings.shipping_title | default: 'Shipping' }}</h3>
-                  <div class="transform transition-transform">▼</div>
+            {% if usage_content != blank %}
+              <div class="usage-section border-t pt-4">
+                <div class="section-title flex justify-between items-center noselect py-2 cursor-pointer" data-toggle="usage">
+                  <h3 class="text-sm font-[500] uppercase">{{ section.settings.usage_title | default: 'How to Use' }}</h3>
+                  <div class="transform transition-transform duration-200" data-icon="usage">
+                    {% render 'icon-down' %}
+                  </div>
                 </div>
-                <div class="details-content">
-                  {{ section.settings.shipping_content }}
+                <div
+                  class="details-content overflow-hidden transition-all duration-300"
+                  data-content="usage"
+                  style="max-height: 0;">
+                  <div class="pb-4">
+                    {{ usage_content }}
+                  </div>
                 </div>
               </div>
             {% endif %}
@@ -253,18 +319,24 @@
       quantityInput.value = parseInt(quantityInput.value) + 1;
     });
 
-    document.querySelectorAll('.section-title').forEach(title => {
-      title.addEventListener('click', function() {
-        this.classList.toggle('active');
-        const content = this.nextElementSibling;
-        const icon = this.querySelector('div');
+    const toggles = document.querySelectorAll('[data-toggle]');
+
+    toggles.forEach(toggle => {
+      toggle.addEventListener('click', function() {
+        const target = this.getAttribute('data-toggle');
+        const content = document.querySelector(`[data-content="${target}"]`);
+        const icon = document.querySelector(`[data-icon="${target}"]`);
         
-        if (content.style.maxHeight) {
-          content.style.maxHeight = null;
-          icon.style.transform = 'rotate(0deg)';
-        } else {
-          content.style.maxHeight = content.scrollHeight + 'px';
-          icon.style.transform = 'rotate(180deg)';
+        if (content && icon) {
+          const isOpen = content.style.maxHeight && content.style.maxHeight !== '0px';
+          
+          if (isOpen) {
+            content.style.maxHeight = '0px';
+            icon.classList.remove('rotate-180');
+          } else {
+            content.style.maxHeight = content.scrollHeight + 'px';
+            icon.classList.add('rotate-180');
+          }
         }
       });
     });
@@ -313,31 +385,39 @@
 </script>
 
 {% schema %}
-{
-  "name": "Product Page",
-  "settings": [
-    {
-      "type": "text",
-      "id": "details_title",
-      "label": "Details Section Title",
-      "default": "Details"
-    },
-    {
-      "type": "richtext",
-      "id": "details_content",
-      "label": "Details Section Content"
-    },
-    {
-      "type": "text",
-      "id": "shipping_title",
-      "label": "Shipping Section Title",
-      "default": "Shipping & Returns"
-    },
-    {
-      "type": "richtext",
-      "id": "shipping_content",
-      "label": "Shipping Section Content"
-    }
-  ]
-}
+  {
+    "name": "Product Page",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Product Information Sections"
+      },
+      {
+        "type": "paragraph",
+        "content": "These settings serve as fallbacks. Product-specific content should be added via metafields for easier management."
+      },
+      {
+        "type": "text",
+        "id": "ingredients_title",
+        "label": "Ingredients Section Title",
+        "default": "Functional Ingredients"
+      },
+      {
+        "type": "richtext",
+        "id": "ingredients_content",
+        "label": "Default Ingredients Content",
+        "info": "This content will be used if no product metafield is set for functional_ingredients"
+      }, {
+        "type": "text",
+        "id": "usage_title",
+        "label": "Usage Section Title",
+        "default": "How to Use"
+      }, {
+        "type": "richtext",
+        "id": "usage_content",
+        "label": "Default Usage Instructions",
+        "info": "This content will be used if no product metafield is set for how_to_use"
+      }
+    ]
+  }
 {% endschema %}
