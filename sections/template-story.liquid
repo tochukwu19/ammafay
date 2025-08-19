@@ -80,6 +80,11 @@
     <div class="relative w-full md:w-1/2 flex items-center justify-center h-[250px] sm:h-[350px] md:h-[400px]">
       {% assign image_1 = section.settings.story_image_1 | default: 'Story.png' %}
       {% assign image_2 = section.settings.story_image_2 | default: section.settings.story_image_1 | default: 'Story.png' %}
+
+      <div class="absolute right-0 top-[-50px] flex items-start gap-2">
+        {% render 'icon-curve-down' %}
+        <p class="nanum-pen-script-regular relative top-[-10px]">Team Amma & Fay</p>
+      </div>
       
       {% if section.settings.story_image_1 %}
         <img src="{{ image_1 | image_url: width: 800 }}" alt="Story Image 1" class="absolute h-[250px] sm:h-[350px] md:h-[400px] -translate-x-12 md:-translate-x-28 z-1 transition-transform duration-300 hover:scale-105" />
