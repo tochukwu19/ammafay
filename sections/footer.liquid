@@ -1,39 +1,37 @@
 {% schema %}
-{
-  "name": "Footer with Waitlist",
-  "settings": [
-    {
-      "type": "header",
-      "content": "Social Media Links"
-    },
-    {
-      "type": "url",
-      "id": "social_instagram_link",
-      "label": "Instagram URL"
-    },
-    {
-      "type": "url",
-      "id": "social_tiktok_link",
-      "label": "TikTok URL"
-    },
-    {
-      "type": "header",
-      "content": "Waitlist Settings"
-    },
-    {
-      "type": "text",
-      "id": "waitlist_heading",
-      "label": "Waitlist Heading",
-      "default": "Be The First To Know When We Launch"
-    },
-    {
-      "type": "text",
-      "id": "waitlist_button_text",
-      "label": "Button Text",
-      "default": "Join Waitlist"
-    }
-  ]
-}
+  {
+    "name": "Footer with Waitlist",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Social Media Links"
+      },
+      {
+        "type": "url",
+        "id": "social_instagram_link",
+        "label": "Instagram URL"
+      },
+      {
+        "type": "url",
+        "id": "social_tiktok_link",
+        "label": "TikTok URL"
+      },
+      {
+        "type": "header",
+        "content": "Waitlist Settings"
+      }, {
+        "type": "text",
+        "id": "waitlist_heading",
+        "label": "Waitlist Heading",
+        "default": "Be The First To Know When We Launch"
+      }, {
+        "type": "text",
+        "id": "waitlist_button_text",
+        "label": "Button Text",
+        "default": "Join Waitlist"
+      }
+    ]
+  }
 {% endschema %}
 
 {% style %}
@@ -43,26 +41,26 @@
     background-size: 200px;
     background-position: bottom right;
   }
-  
+
   .footer-logo {
     text-align: justify;
     font-size: clamp(5.5vw, 10.5vw, 15.5vw);
     font-weight: 500;
   }
-  
+
   .footer-logo:after {
     content: "{{ shop.name }}";
     display: inline-block;
     width: 100%;
   }
-  
+
   .waitlist-form .error-message {
     color: #dc2626;
     font-size: 0.875rem;
     margin-top: 0.25rem;
     display: none;
   }
-  
+
   .waitlist-form .success-message {
     color: #16a34a;
     font-size: 0.875rem;
@@ -73,7 +71,7 @@
 
 <div class="footer h-auto md:h-[350px] bg-[#ECECEC] w-full px-6 md:px-20 py-16 md:pt-16 flex items-start">
   <div class="w-[90%] mx-auto md:mx-0 md:w-[75%] flex flex-col gap-12 md:flex-row items-center md:items-start justify-between relative">
-    
+
     <div class="flex flex-col gap-2 md:gap-0 items-center md:items-start">
       <img
         src="{{ 'Logo.png' | asset_url }}"
@@ -82,91 +80,158 @@
       <p class="text-black text-lg font-[500] md:mb-2">Follow us on socials</p>
       <div class="flex items-center space-x-4 text-2xl">
         {% if settings.social_tiktok_link != blank %}
-          <a href="{{ settings.social_tiktok_link }}" target="_blank" rel="noopener noreferrer">
+          <a
+            href="{{ settings.social_tiktok_link }}"
+            target="_blank"
+            rel="noopener noreferrer">
             {% render 'icon-tiktok' %}
           </a>
         {% endif %}
-        
+
         {% if settings.social_instagram_link != blank %}
-          <a href="{{ settings.social_instagram_link }}" target="_blank" rel="noopener noreferrer">
+          <a
+            href="{{ settings.social_instagram_link }}"
+            target="_blank"
+            rel="noopener noreferrer">
             {% render 'icon-insta' %}
           </a>
         {% endif %}
       </div>
     </div>
-    
+
     <div class="flex flex-col items-center text-center md:text-left md:items-start space-y-4 w-full max-w-xl">
       <h2 class="text-black font-[500] text-base">
         {{ settings.waitlist_heading | default: 'Be The First To Know When We Launch' }}
       </h2>
-      
-      <form class="waitlist-form w-full" action="/contact" method="post" accept-charset="UTF-8">
-        <input type="hidden" name="form_type" value="customer" />
-        <input type="hidden" name="utf8" value="✓" />
-        <input type="hidden" name="contact[tags]" value="waitlist,coming-soon" />
-        
+
+
+      {%- form 'customer' -%}
         <input
-          type="email"
-          name="contact[email]"
-          placeholder="Enter your email address"
-          class="w-full rounded-full bg-white px-6 py-3 text-sm focus:outline-none mb-4"
-          />
-        
+          type="hidden"
+          name="customer[tags]"
+          value="waitlist">
         <input
-          type="tel"
-          name="contact[phone]"
-          placeholder="📞  Phone number"
-          class="w-full rounded-full bg-white px-6 py-3 mb-4 text-sm focus:outline-none"
-          />
-        
-        <button 
-          type="submit"
-          class="w-fit bg-black text-white px-6 py-3 rounded-full font-medium hover:opacity-90 transition">
-          {{ settings.waitlist_button_text | default: 'Join Waitlist' }}
-        </button>
-        
-        <div class="error-message"></div>
-        <div class="success-message"></div>
-      </form>
+          type="hidden"
+          name="customer[accepts_marketing]"
+          value="true">
+
+        {%- if form.posted_successfully? -%}
+          <div class="waitlist-success">
+            ✅ You're on the waitlist! We'll notify you when we launch.
+          </div>
+        {%- endif -%}
+
+        {%- if form.errors -%}
+          <div class="waitlist-error">
+            {%- for field in form.errors -%}
+              {%- if field == 'email' and form.errors.messages[field] contains 'taken' -%}
+                ⚠️ You're already on our waitlist!
+              {%- else -%}
+                ❌ {{ form.errors.messages[field] }}
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+
+        <div class="waitlist-form">
+          <input
+            type="email"
+            name="customer[email]"
+            placeholder="Enter your email address"
+            class="w-full rounded-full bg-white px-6 py-3 text-sm focus:outline-none mb-4"
+            required>
+
+          <input
+            type="number"
+            name="customer[phone_number]"
+            placeholder="Phone number"
+            class="appearance-none [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [moz-appearance:textfield] w-full rounded-full bg-white px-6 py-3 mb-4 text-sm focus:outline-none">
+
+          <button type="submit" class="w-fit bg-black text-white px-6 py-3 rounded-full font-medium hover:opacity-90 transition">
+            Join Waitlist
+          </button>
+        </div>
+      {%- endform -%}
+
+    {% comment %} <form class="waitlist-form w-full" action="/contact" method="post" accept-charset="UTF-8">
+                    <input type="hidden" name="form_type" value="customer" />
+                    <input type="hidden" name="utf8" value="✓" />
+                    <input type="hidden" name="contact[tags]" value="waitlist,coming-soon" />
+            
+                    <input
+                      type="email"
+                      name="contact[email]"
+                      placeholder="Enter your email address"
+                      class="w-full rounded-full bg-white px-6 py-3 text-sm focus:outline-none mb-4"
+                      />
+            
+                    <input
+                      type="tel"
+                      name="contact[phone]"
+                      placeholder="📞  Phone number"
+                      class="w-full rounded-full bg-white px-6 py-3 mb-4 text-sm focus:outline-none"
+                      />
+            
+                    <button 
+                      type="submit"
+                      class="w-fit bg-black text-white px-6 py-3 rounded-full font-medium hover:opacity-90 transition">
+                      {{ settings.waitlist_button_text | default: 'Join Waitlist' }}
+                    </button>
+            
+                    <div class="error-message"></div>
+                    <div class="success-message"></div>
+              </form> {% endcomment %}
     </div>
   </div>
 </div>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-  const form = document.querySelector('.waitlist-form');
-  const errorMessage = form.querySelector('.error-message');
-  const successMessage = form.querySelector('.success-message');
+  // document.addEventListener('DOMContentLoaded', function() {
+  //   const form = document.querySelector('.waitlist-form');
+  //   const errorMessage = form.querySelector('.error-message');
+  //   const successMessage = form.querySelector('.success-message');
   
-  form.addEventListener('submit', function(e) {
-    errorMessage.style.display = 'none';
-    successMessage.style.display = 'none';
+  //   form.addEventListener('submit', function(e) {
+  //     errorMessage.style.display = 'none';
+  //     successMessage.style.display = 'none';
     
-    const email = form.querySelector('input[name="contact[email]"]').value;
-    if (!email || !email.includes('@')) {
-      e.preventDefault();
-      errorMessage.textContent = 'Please enter a valid email address.';
-      errorMessage.style.display = 'block';
-      return;
-    }
+  //     const email = form.querySelector('input[name="contact[email]"]').value;
+  //     if (!email || !email.includes('@')) {
+  //       e.preventDefault();
+  //       errorMessage.textContent = 'Please enter a valid email address.';
+  //       errorMessage.style.display = 'block';
+  //       return;
+  //     }
     
-    const phone = form.querySelector('input[name="contact[phone]"]').value;
-    if (!phone || phone.length < 10) {
-      e.preventDefault();
-      errorMessage.textContent = 'Please enter a valid phone number.';
-      errorMessage.style.display = 'block';
-      return;
-    }
+  //     const phone = form.querySelector('input[name="contact[phone]"]').value;
+  //     if (!phone || phone.length < 10) {
+  //       e.preventDefault();
+  //       errorMessage.textContent = 'Please enter a valid phone number.';
+  //       errorMessage.style.display = 'block';
+  //       return;
+  //     }
+  //   });
+  
+  //   const urlParams = new URLSearchParams(window.location.search);
+  //   if (urlParams.get('contact[success]')) {
+  //     successMessage.textContent = 'You\'re on the waitlist! We\'ll notify you when we launch.';
+  //     successMessage.style.display = 'block';
+  //   }
+  //   if (urlParams.get('contact[error]')) {
+  //     errorMessage.textContent = 'There was an error. Please try again.';
+  //     errorMessage.style.display = 'block';
+  //   }
+  // });
+  
+  document.addEventListener('DOMContentLoaded', function() {
+  const form = document.querySelector('form[action*="customer"]');
+  const button = form?.querySelector('.waitlist-button');
+  
+  if (form && button) {
+    form.addEventListener('submit', function() {
+      button.textContent = 'Joining...';
+      button.disabled = true;
+    });
+  }
   });
-  
-  const urlParams = new URLSearchParams(window.location.search);
-  if (urlParams.get('contact[success]')) {
-    successMessage.textContent = 'You\'re on the waitlist! We\'ll notify you when we launch.';
-    successMessage.style.display = 'block';
-  }
-  if (urlParams.get('contact[error]')) {
-    errorMessage.textContent = 'There was an error. Please try again.';
-    errorMessage.style.display = 'block';
-  }
-});
 </script>

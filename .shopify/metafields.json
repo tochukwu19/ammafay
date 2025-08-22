@@ -99,6 +99,26 @@
         "name": "list.product_reference",
         "category": "REFERENCE"
       }
+    },
+    {
+      "key": "functional_ingredients",
+      "namespace": "custom",
+      "name": "functional ingredients",
+      "description": "",
+      "type": {
+        "name": "multi_line_text_field",
+        "category": "TEXT"
+      }
+    },
+    {
+      "key": "how_to_use",
+      "namespace": "custom",
+      "name": "how to use",
+      "description": "",
+      "type": {
+        "name": "multi_line_text_field",
+        "category": "TEXT"
+      }
     }
   ],
   "variant": [],
